@@ -26,7 +26,7 @@ Compatibility is feature based: plugin SDK theme registration/request, contribut
 | Computer screen | Correctly showed unsupported/unconfigured state; no Docker image or live RFB stream tested |
 | Git entry | Root `plugin.js` matches Hermes installer discovery; SDK admission scanner returned no findings |
 
-The live provider test used Grok 4.7. OpenAI, Anthropic, Gemini and local-model reply tests remain pending. Native connector authorization, installation of third-party plugins, voice, file execution, real multi-gateway switching and agent-generated pack import remain pending. Browser demonstrations do not satisfy those checks.
+The live provider test used Grok 4.7. OpenAI, Anthropic, Gemini and local-model reply tests remain pending. Native connector authorization, installation of third-party plugins, voice, agent-driven file operations, real multi-gateway switching and agent-generated pack import remain pending. Browser demonstrations do not satisfy those checks.
 
 ## Repairs from this audit
 
@@ -54,3 +54,9 @@ Agent’s computer now opens a closeable main workspace using `host.openWorkspac
 Appearance now has a persistent header and a labeled top-right X (44×44px). Native scrolling and closure passed. The browser adapter renders the actual plugin workspace rather than redirecting the palette shortcut to a different settings screen. Desktop 1440×1000, tablet 834×1112 and mobile 390×844 checks passed for computer open/close, keyboard appearance closure, persistent X after form scrolling and absence of document overflow. A React list-key warning in the rail was also corrected. Native core Settings is its own full-screen overlay and retains its own close control.
 
 Regression check: `node tandem/scripts/check-workspaces.mjs` covers modern main-workspace navigation, close disposal, stable tab identity and explicit legacy SDK fallback. Existing checks and SDK admission were rerun. The daily Hermes home and configuration were not modified. The existing formal composition evaluation remains below its design acceptance threshold; this functional patch does not change that verdict.
+
+## Documentation and disposable workspace follow-up
+
+The October 2 homepage refresh adds labeled captures of the browser preview, native appearance editor and actual native terminal. A disposable native workspace contained `README.md`, `hello.py` and `notes/release-checklist.md`. Hermes’s Files pane listed the files and opened the README in its native editor. A real native zsh shell executed `ls` and `python3 hello.py`; output matched the sample script. No provider or production-home configuration was changed.
+
+The initial blank terminal was recovered with **Layout editor → Advanced → Terminal deck → Done**, which mounted the native terminal and created its zsh session. Reset layout subsequently restored plugin placement. A later blank appearance body after pane rearrangement recovered through **Reload window**. These are host layout/renderer recoveries on this test build, not fixes to the Hermes backend or proof that every layout is compatible. The README documents the recovery and the native Git-install dialog remains untested.

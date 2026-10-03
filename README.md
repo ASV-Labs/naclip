@@ -1,106 +1,129 @@
-# NaCLip for Hermes Desktop
+<div align="center">
+
+# NaCLip
+
+**Your skin for Hermes. Make the desk yours.**
+
+A customizable Hermes Desktop plugin by **ASV Labs**.
 
 [![Checks](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml/badge.svg)](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A customizable skin for working alongside your Hermes agent: Sessions and Bots, instance/profile access, a composer model picker, light/dark controls, and an agent-computer pane.
+[Install](#install-in-hermes-desktop) · [Screenshots](docs/SCREENSHOTS.md) · [Customization](docs/APPEARANCE.md) · [Verification](docs/RELEASE-AUDIT.md)
 
-**Status: development preview and experimental desktop plugin.** The browser preview is working with simulated services. The native plugin has passed a scoped macOS integration smoke test, including a real Grok 4.7 reply. Full native parity and Docker screen acceptance remain pending. This repository does not ship a standalone Hermes application or a preconfigured virtual machine.
+</div>
 
-## Choose how to try it
+NaCLip adds themes, customizable navigation widgets and appearance tools to your existing Hermes Desktop. Choose **Graphite, Ocean or Paper**, switch light/dark with the sun/moon control, and make the workspace feel like yours.
 
-| Mode | Requirements | What it changes |
-| --- | --- | --- |
-| Browser preview | Node.js and npm; macOS + Xcode Command Line Tools for optional Files/Terminal | Simulated chats; optional real local folder access and shell after explicit permission |
-| Isolated native test | Compatible Hermes Desktop source/runtime plus separate app-data and Hermes-home directories | A separate test instance with independent state and backend; broader acceptance remains pending |
-| Plugin in an existing Hermes | Compatible desktop plugin SDK | Adds NaCLip to that instance; theme/sidebar choices can affect its interface |
-| Live Docker-backed computer | Native Hermes backend with Bot Screen support, running Docker engine, desktop sandbox image | Creates an agent desktop in a container on the backend host |
+Hermes continues to run your agents, models, conversations, tools and connections. NaCLip uses its desktop plugin SDK; it does not replace or patch the Hermes application or backend. Your providers and local LLMs remain configured through Hermes.
 
-A VM does not inherently require Docker. **The Docker sandbox path does.** On macOS and Windows, Docker Desktop is a straightforward way to provide the Linux engine/VM. If Hermes connects to a remote Linux backend, Docker belongs on that backend when it uses Docker; the desktop client does not need Docker just to view the stream. A Linux gateway can also provide a Bot Screen directly without Docker. See [computer sandbox setup](docs/COMPUTER-SANDBOX.md).
+**Verified in actual Hermes Desktop on macOS:** the plugin loaded, applied themes, persisted widget choices and worked alongside a real **Grok 4.7** reply. Native Files opened a disposable workspace document, and native Terminal ran its sample Python script. This is an **experimental release** with a scoped integration test, not full cross-platform acceptance. [See exactly what passed and what remains pending →](docs/RELEASE-AUDIT.md)
 
-## Quick start: browser preview
+### A look inside
 
-Install Node.js 22.22 or newer within a version supported by your Hermes checkout if you also plan native development. The preview itself supports Node 20.19 or 22.12 and newer per Vite's engine requirements. From this repository:
+**Ocean · browser preview.** Expanded widget labels and the chat layout. Conversations, model entries and service responses here are simulated; the native host retains its own session and model controls.
+
+[![NaCLip Ocean browser preview with expanded widget navigation](docs/screenshots/preview-ocean.png)](docs/screenshots/preview-ocean.png)
+
+**Paper · actual Hermes Desktop.** NaCLip’s native appearance editor, widget treatment and persistent close control.
+
+[![NaCLip Paper appearance editor running in native Hermes Desktop](docs/screenshots/native-appearance-paper.png)](docs/screenshots/native-appearance-paper.png)
+
+[Open the screenshot gallery, including the working native terminal →](docs/SCREENSHOTS.md)
+
+## Install in Hermes Desktop
+
+You need an existing Hermes Desktop build with the compatible desktop plugin SDK. The tested baseline is **macOS arm64**, Hermes source commit [`54bc5e509c98`](https://github.com/NousResearch/hermes-agent/commit/54bc5e509c985f37265c3d416bd2c64b10fc77ba). SDK compatibility can vary between releases.
+
+1. Open **Capabilities → Plugins** in Hermes Desktop.
+2. Choose **Install from Git** and paste:
+
+   ```text
+   https://github.com/ASV-Labs/naclip
+   ```
+
+3. Enable **NaCLip**.
+4. Open the **Customize appearance** palette widget above Settings, or run **NaCLip: Customize appearance** from Hermes’s command palette.
+5. Choose a theme and widget pack, then click **Apply appearance**. Use the top-right **X** to return to your chat.
+
+The root [`plugin.js`](plugin.js) is the installable entry. **No npm build or Docker installation is needed for the skin.** The native smoke test staged this entry in a dedicated test home and enabled it successfully; the Git-install dialog itself has not yet been tested end to end.
+
+Prefer testing away from your daily agent first? Follow [the isolated native test guide](docs/NATIVE-TEST.md). A separate app copy, Hermes home, backend, auth store and workspace protect the test boundary; changing only Electron’s user-data directory is insufficient.
+
+### Setup and recovery
+
+- **Missing or overlapping panes:** save your preferred arrangement, then use **Reset layout** in Hermes’s command palette. This resets pane placement.
+- **Blank native terminal:** open **Layout editor → Advanced → Terminal deck → Done**. This activated the native shell on the tested build. See [native terminal troubleshooting](docs/NATIVE-TEST.md#native-files-and-terminal).
+- **Return to core Hermes:** disable NaCLip in Capabilities → Plugins. Select a core theme in Settings → Appearance → Theme if needed.
+- **Upgrading an earlier Tandem installation:** disable or remove that copy first. The internal plugin ID remains `tandem` for saved-setting compatibility.
+
+## Make it yours
+
+| Customize | Options |
+| --- | --- |
+| Theme | Graphite, Ocean and Paper, each with light and dark palettes |
+| Colors | Backgrounds, surfaces, text, borders and accent colors |
+| Widget pack | Signal, Outline or Mono; rounded, circle or square tiles |
+| Navigation | Hover names, expanded labels, widget names/icons/colors, ordering and visibility |
+| Custom widgets | Shortcuts to supported pages, chat prompts or HTTP(S) links |
+| Share a pack | JSON import/export with a review draft before applying |
+| Create with your agent | Draft a theme brief in the current chat, review the returned JSON, then import it |
+
+Settings stays accessible. Appearance packs change presentation and navigation; they do not change provider credentials, models or agent configuration. Agent-generated pack acceptance remains pending. [Appearance and widget pack guide →](docs/APPEARANCE.md)
+
+## Browser preview
+
+Try the interface locally without installing Hermes:
 
 ```sh
-cd localhost-preview
+git clone https://github.com/ASV-Labs/naclip.git
+cd naclip/localhost-preview
 npm ci
 npm run dev
 ```
 
-Open [http://127.0.0.1:14327/](http://127.0.0.1:14327/). Keep that terminal running; Ctrl+C stops the server. It binds only to loopback and refuses to take another port if 14327 is occupied.
+Use Node **20.19+ or 22.12+** supported by Vite. Open [http://127.0.0.1:14327/](http://127.0.0.1:14327/); keep the terminal running and press Ctrl+C to stop it. The server binds to loopback only.
 
-The preview contains sample Local, OpenAI, Grok, Anthropic and Gemini workspaces. Its models are sample catalog entries, not discovered accounts or installed models. Messages get local simulated replies. Files can open a native macOS folder chooser and preview real workspace text files after permission. Terminal starts a real interactive shell only after a separate **Enable local terminal** action. Attachment controls retain filenames and voice does not activate a microphone. “Start computer” paints a simulated screen; it does not start Docker. See [local Files and Terminal setup](docs/LOCAL-WORKSPACE.md) for prerequisites, access limits, and stopping access.
+The preview uses simulated chats and sample provider catalogs, including OpenAI, Anthropic, Grok, Gemini and local LLM examples. Its redesigned capability explorer adds search, filters and sorting. Optional **real macOS Files and Terminal** access requires explicit actions and Xcode Command Line Tools; it is a development companion, not the Hermes backend. [Preview guide](docs/PREVIEW.md) · [Files/Terminal setup and access limits](docs/LOCAL-WORKSPACE.md)
 
-### Explore capabilities and settings
+## Does the agent’s computer need Docker?
 
-Capabilities includes Skills, Tools, Connectors and Plugins. Search names/descriptions (or individual tool names), combine category/source/status filters, sort results and inspect details. The connector directory contains 65 public catalog entries; other tabs use representative samples. Toggles and Add/Remove are scoped browser demonstrations, not native installations or authorizations. Mobile filters expand on demand.
+**Only if you choose Hermes’s Docker-backed computer sandbox.** The skin, themes, native Files and local Terminal do not require Docker. With a remote Docker backend, the engine runs on that backend host. A supported Linux Bot Screen can also work without Docker.
 
-The searchable settings tree includes all 18 native groups and their subpages. Providers includes Anthropic and other major cloud/local examples; Gateways manages sample instances; Connectors holds app/MCP integrations. See [the Hermes feature audit](docs/HERMES-PARITY.md) for coverage and the current integration boundary.
+The computer pane needs a configured Hermes screen backend. Our isolated test correctly showed an unsupported/unconfigured notice; **a live Docker/RFB screen has not been verified**. [Computer sandbox requirements and setup →](docs/COMPUTER-SANDBOX.md)
 
-### Manage chats
+## Documentation
 
-Each session row has a **…** button:
+| Guide | What you will find |
+| --- | --- |
+| [Screenshots](docs/SCREENSHOTS.md) | Labeled native and preview captures; click for full size |
+| [Appearance](docs/APPEARANCE.md) | Themes, widget packs, custom widgets and JSON schema |
+| [Native testing](docs/NATIVE-TEST.md) | Independent setup, launcher, recovery and acceptance checklist |
+| [Browser preview](docs/PREVIEW.md) | Sample capabilities, settings and chat archive/delete controls |
+| [Local Files and Terminal](docs/LOCAL-WORKSPACE.md) | Permission flow, macOS requirements, shell access and revocation |
+| [Computer sandbox](docs/COMPUTER-SANDBOX.md) | Docker and other screen backend options |
+| [Hermes feature audit](docs/HERMES-PARITY.md) | Coverage and the native/prototype boundary |
+| [Release audit](docs/RELEASE-AUDIT.md) | Actual native results and remaining acceptance work |
+| [Validation](docs/VALIDATION.md) | Offline checks and their scope |
 
-- **Archive chat** removes it from Chats and keeps its draft, messages, attachments and model choice.
-- **Archived** beside the Chats heading opens the archive for the current instance/profile.
-- **Restore chat** returns it to Chats.
-- **Delete chat…** opens a confirmation with the chat's workspace and profile. Cancel keeps it; Archive instead preserves it; Delete chat removes its local content permanently.
-
-Bot chats are canonical conversations and do not expose regular-session deletion controls. The preview stores chat content and archive state in this browser's local storage under `tandem-preview:chats:v1`. Reloading retains them; clearing site data removes them. Do not enter secrets into this demonstration. These controls never archive or delete your real Hermes conversations.
-
-## Personalize the skin
-
-See [Appearance and widget packs](docs/APPEARANCE.md) for hover labels, expanded navigation, Graphite/Ocean/Paper light and dark palettes, custom colors/icons, widget ordering/visibility, custom prompt/page/link widgets and JSON import/export. Draft a theme request to your current agent, then review/import its returned pack. The browser preview simulates messaging; native request drafting is available; agent-generated pack acceptance remains to be verified.
-
-## Native test and installation
-
-Use [the isolated native test guide](docs/NATIVE-TEST.md) before installing into your daily instance. Separate Electron user data alone is not the whole isolation boundary: give the test its own `HERMES_HOME`, provider configuration, and backend context as well.
-
-The revised runtime plugin is [`plugin.js`](plugin.js). It uses the Hermes plugin SDK, reveals the native Bots pane, opens existing profiles/settings/capabilities routes, and uses native theme controls. The native core still owns sessions, provider/model switching, language settings, attachments, voice and terminals. The expanded browser roster is a prototype, not an installed replacement of those native components.
-
-[Native acceptance checklist](docs/NATIVE-TEST.md#acceptance-checklist) includes real session archive/delete, actual provider inventories, multiple connection ownership, stream reconnect and lease cleanup. Local build success is not native acceptance.
-
-## Install as a Hermes Desktop plugin
-
-In a compatible Hermes Desktop, open **Capabilities → Plugins → Install from Git** and enter `https://github.com/ASV-Labs/naclip`. Enable **NaCLip**. The root `plugin.js` is the installable desktop entry; no preview build is needed. Try the isolated test first, because installing in your daily instance changes that instance’s appearance.
-
-Use **Customize appearance** (the palette widget above Settings) or the command **NaCLip: Customize appearance** for theme and widget editing. The pane has a persistent top-right **X** and a link to native Hermes appearance settings. **Agent’s computer** opens a closeable main workspace, including from Capabilities. Core Settings retains its own close control.
-
-If panes are missing or overlap after first installation, use the command palette’s **Reset layout**. This resets your pane arrangement, so record a layout you want to retain before using it. Native pane placement is managed by Hermes.
-
-Disable NaCLip from Capabilities → Plugins to restore core navigation. Select a core theme in Settings → Appearance → Theme if needed. The internal plugin ID remains `tandem` for storage compatibility; remove or disable an older Tandem installation before installing this repository to avoid duplicate IDs. See [native setup and recovery](docs/NATIVE-TEST.md) and [the release audit](docs/RELEASE-AUDIT.md).
-
-## Computer sandbox and providers
-
-Follow [computer sandbox setup](docs/COMPUTER-SANDBOX.md) for Docker installation, profile configuration, image selection, readiness checks and troubleshooting. Configure OpenAI, Grok or a local compatible endpoint through the native Hermes settings in the **test instance**. Set provider credentials locally. Local LLM inference is separate from the computer container and does not inherently require Docker.
-
-## Development checks
+## Development
 
 ```sh
 cd localhost-preview
+npm ci
 npm test
 npm run build
-node ../tandem/scripts/check-routing.mjs
-node ../tandem/scripts/check-appearance.mjs
 cd ..
+node tandem/scripts/check-routing.mjs
+node tandem/scripts/check-appearance.mjs
+node tandem/scripts/check-workspaces.mjs
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/test-launcher.py
 ```
 
-Preview tests cover catalog filtering, settings routes, archive recovery, deletion after persistence, instance/profile isolation and canonical-bot protection. Local companion tests additionally exercise permission, origin/host checks, path escape rejection, real PTY output, `cd`, Ctrl+C and revocation. Routing checks reject ambiguous focused owners and unavailable routes. Appearance checks validate all palettes and pack round trips, and reject unsafe/unreadable definitions. Five launcher tests cover isolated paths, credential environment exclusion and symlink rejection. See [validation status](docs/VALIDATION.md) for the observed boundary.
+`plugin.js` contains the native plugin; `localhost-preview/` contains the React/Vite demonstration and local companion; `scripts/` contains the isolated macOS launcher. GitHub Actions runs the offline checks. [Validation details](docs/VALIDATION.md)
 
-## Repository layout
+Provider credentials, account state, real conversations, app binaries and local test directories are excluded from this repository. Android and iOS clients are a separate future project.
 
-```text
-plugin.js                         Native runtime plugin entry
-tandem/scripts/check-routing.mjs  Owner-routing checks
-scripts/launch-isolated-mac.py    Prepared macOS test-app launcher
-localhost-preview/               React/Vite simulation with optional local workspace companion
-docs/                            Native testing, sandbox setup and validation
-examples/docker-sandbox.yaml     Configuration fragment; no credentials
-```
+## License and credits
 
-The supplied source archive, nested source checkout, dependencies, test data, local review packets and screenshots are ignored by Git. Account configuration, authentication tokens, conversations and Hermes app binaries are excluded from this repository. Android and iOS clients are a separate future project.
-
-## License
-
-MIT, retaining the original ASV Labs copyright; see [LICENSE](LICENSE). See [third-party notices](THIRD-PARTY-NOTICES.md) for upstream connector metadata. This project is not affiliated with Nous Research. Hermes and Docker retain their own licenses and requirements.
+[MIT](LICENSE) · [Third-party notices](THIRD-PARTY-NOTICES.md). NaCLip is an ASV Labs project and is not affiliated with Nous Research. Hermes and Docker retain their own licenses and requirements.

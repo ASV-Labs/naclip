@@ -88,6 +88,16 @@ Configure providers and local model endpoints through native Settings. Connect o
 
 Plugin discovery may differ between SDK versions. If it is absent, check this test home's `desktop-plugins/tandem/plugin.js`, native plugin errors and desktop logs. Do not fix discovery by copying it into the production home.
 
+## Native Files and Terminal
+
+Use a disposable workspace for the first test. Open it with Hermes’s **Open folder as project…** action and confirm the active project before running commands. Native Files and Terminal belong to Hermes; the browser preview’s folder permission and shell flow is a separate local development companion.
+
+On the tested build, a terminal zone was visible but blank after layout adoption. **Layout editor → Advanced → Terminal deck → Done** activated a real native zsh terminal. The terminal then listed the workspace files and successfully ran `python3 hello.py`. This is a layout recovery, not a NaCLip backend patch. Changing templates rearranges panes, so preserve an arrangement you want to retain first. **Reset layout** restored the plugin’s rail/dock placement after the test.
+
+The native Files tree listed the sample files and opened `README.md` in Hermes’s editor. A later renderer/layout issue left the appearance body blank despite its controls being present; the command palette’s **Reload window** action recovered the isolated renderer. If a pane remains blank, check the host’s layout and desktop logs rather than treating an empty pane as a running terminal.
+
+These manual workspace checks do not verify agent-driven file edits, all shell interactions or OS-level sandboxing. [Screenshots](SCREENSHOTS.md) show the actual native terminal output without production project data.
+
 ## Acceptance checklist
 
 - Verify the desktop log and active runtime paths point at the test home and independent checkout.
