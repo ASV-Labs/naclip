@@ -10,7 +10,7 @@ A customizable skin for working alongside your Hermes agent: Sessions and Bots, 
 
 | Mode | Requirements | What it changes |
 | --- | --- | --- |
-| Browser preview | Node.js and npm | Local browser data only; no Hermes installation, API keys, Docker or models needed |
+| Browser preview | Node.js and npm; macOS + Xcode Command Line Tools for optional Files/Terminal | Simulated chats; optional real local folder access and shell after explicit permission |
 | Isolated native test | Compatible Hermes Desktop source/runtime plus separate app-data and Hermes-home directories | A separate test instance with independent state and backend; broader acceptance remains pending |
 | Plugin in an existing Hermes | Compatible desktop plugin SDK | Adds NaCLip to that instance; theme/sidebar choices can affect its interface |
 | Live Docker-backed computer | Native Hermes backend with Bot Screen support, running Docker engine, desktop sandbox image | Creates an agent desktop in a container on the backend host |
@@ -29,7 +29,7 @@ npm run dev
 
 Open [http://127.0.0.1:14327/](http://127.0.0.1:14327/). Keep that terminal running; Ctrl+C stops the server. It binds only to loopback and refuses to take another port if 14327 is occupied.
 
-The preview contains sample Local, OpenAI, Grok, Anthropic and Gemini workspaces. Its models are sample catalog entries, not discovered accounts or installed models. Messages get local simulated replies. Files show examples, attachment controls retain filenames, voice does not activate a microphone, and terminal commands do not execute. “Start computer” paints a simulated screen; it does not start Docker.
+The preview contains sample Local, OpenAI, Grok, Anthropic and Gemini workspaces. Its models are sample catalog entries, not discovered accounts or installed models. Messages get local simulated replies. Files can open a native macOS folder chooser and preview real workspace text files after permission. Terminal starts a real interactive shell only after a separate **Enable local terminal** action. Attachment controls retain filenames and voice does not activate a microphone. “Start computer” paints a simulated screen; it does not start Docker. See [local Files and Terminal setup](docs/LOCAL-WORKSPACE.md) for prerequisites, access limits, and stopping access.
 
 ### Explore capabilities and settings
 
@@ -86,7 +86,7 @@ cd ..
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/test-launcher.py
 ```
 
-Seven preview tests cover catalog filtering, settings routes, archive recovery, deletion after persistence, instance/profile isolation and canonical-bot protection. Routing checks reject ambiguous focused owners and unavailable routes. Appearance checks validate all palettes and pack round trips, and reject unsafe/unreadable definitions. Five launcher tests cover isolated paths, credential environment exclusion and symlink rejection. See [validation status](docs/VALIDATION.md) for the observed boundary.
+Preview tests cover catalog filtering, settings routes, archive recovery, deletion after persistence, instance/profile isolation and canonical-bot protection. Local companion tests additionally exercise permission, origin/host checks, path escape rejection, real PTY output, `cd`, Ctrl+C and revocation. Routing checks reject ambiguous focused owners and unavailable routes. Appearance checks validate all palettes and pack round trips, and reject unsafe/unreadable definitions. Five launcher tests cover isolated paths, credential environment exclusion and symlink rejection. See [validation status](docs/VALIDATION.md) for the observed boundary.
 
 ## Repository layout
 
@@ -94,7 +94,7 @@ Seven preview tests cover catalog filtering, settings routes, archive recovery, 
 plugin.js                         Native runtime plugin entry
 tandem/scripts/check-routing.mjs  Owner-routing checks
 scripts/launch-isolated-mac.py    Prepared macOS test-app launcher
-localhost-preview/               Runnable React/Vite interface simulation
+localhost-preview/               React/Vite simulation with optional local workspace companion
 docs/                            Native testing, sandbox setup and validation
 examples/docker-sandbox.yaml     Configuration fragment; no credentials
 ```
