@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Render static share metadata and validate local/deployed page + JPEG bytes."""
-import argparse, datetime, hashlib, html, json, struct, sys, urllib.request
+import argparse, datetime, hashlib, html, json, struct, sys, urllib.request, urllib.parse
 from collections import defaultdict
 from html.parser import HTMLParser
 from pathlib import Path
@@ -89,6 +89,15 @@ def fetch(url, agent):
 
 def validate(deployed):
     records=[]
+    spec_errors=[]
+    canonical=urllib.parse.urlparse(SPEC['canonicalUrl']);image=urllib.parse.urlparse(SPEC['imageUrl'])
+    if canonical.scheme!='https' or image.scheme!='https': spec_errors.append('share URLs must use HTTPS')
+    if canonical.netloc!=image.netloc: spec_errors.append('image must share the canonical origin')
+    if SPEC['cardType']!='summary_large_image': spec_errors.append('large image card type required')
+    if SPEC['imageWidth']<800: spec_errors.append('image width below 800px')
+    if SPEC['asset']['sha256'][:12] not in SPEC['imageUrl']: spec_errors.append('image URL is not content-addressed')
+    if not SPEC['imageAlt'].strip(): spec_errors.append('image alt is empty')
+    if spec_errors: records.append({'mode':'spec','findings':spec_errors})
     if not deployed:
         errors=inspect_html((ROOT/'index.html').read_bytes())+inspect_image((ROOT/SPEC['imagePath']).read_bytes())
         records.append({'mode':'build','findings':errors})

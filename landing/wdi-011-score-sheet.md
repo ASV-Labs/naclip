@@ -42,3 +42,7 @@ Three reviewed compositions: desktop opening, tablet second scene, mobile second
 HF-1 through HF-9: no identical card wall, unjustified gradient blob, invented product UI, unsourced metric, alternating zig-zag sequence, exceeded card budget, stock-icon feature grid, testimonial carousel or multi-brand sameness. Each fact in the proof strip has its own adjacent source link. VPM proof mode is honest text/provenance only; static media in main is classified identity.
 
 The final static verifier exited 0 with only an informational card-like-controls finding. It does not override this FAIL verdict for independent authorship/signature conformity. Full machine receipts are retained locally and ignored; they are not website assets.
+
+## Social distribution update
+
+The dedicated 1200×630 type-led raster and its square crop were inspected; exact-size Instagram post and Story exports were inspected separately. Metadata/image build and deployed crawler checks PASS. X validator PASS and actual canonical-URL X composer preview PASS; test draft discarded, no publication. These are distribution checks and do not change the supplied-template authorship verdict above. Authoring HTML is an internal script outside the published landing bundle.
