@@ -10,8 +10,8 @@
     html, body { width: 100%; height: 100%; overflow: hidden; font-family: Helvetica, Arial, sans-serif; }
   </style>
   <meta name="theme-color" content="#010101" />
-  <link rel="stylesheet" href="styles.css" />
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20261002-motion" />
+  <script src="script.js?v=20261002-motion" defer></script>
 
   <!-- NaCLip social preview -->
     <link rel="canonical" href="https://asv-labs.github.io/naclip/" />
@@ -82,10 +82,10 @@
 
 <!-- Hero Section -->
 <div aria-hidden="true" class="fixed inset-0 w-full h-full overflow-hidden bg-black">
-  <video id="video1" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true" muted loop playsinline preload="metadata">
+  <video id="video1" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true" muted playsinline preload="auto">
     <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_222559_363e35af-d0bc-4650-b3cb-58bf833daa51.mp4" type="video/mp4" />
   </video>
-  <video id="video2" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true" muted loop playsinline preload="metadata">
+  <video id="video2" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true" muted playsinline preload="auto">
     <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_232048_98292efb-9b9c-4089-a587-72f33437c8f8.mp4" type="video/mp4" />
   </video>
   <div class="scene-shade absolute inset-0"></div>
@@ -172,9 +172,9 @@
   <div class="scene-controls" aria-label="Explore NaCLip">
     <button type="button" data-scene="0" aria-pressed="true">01 <span>The skin</span></button>
     <button type="button" data-scene="1" aria-pressed="false">02 <span>Your setup</span></button>
-    <button type="button" id="motion-toggle" aria-pressed="false" aria-label="Pause background motion">Ⅱ <span>Pause</span></button>
   </div>
   <p class="verification-note">Experimental · <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/RELEASE-AUDIT.md" target="_blank" rel="noopener noreferrer">Native macOS test verified · See scope ↗</a><br/><a class="owner-credit" href="https://nousresearch.com/" target="_blank" rel="noopener noreferrer"><img src="assets/nous-research.png" alt="" data-wdi-media-role="identity" width="244" height="340" />Hermes by Nous Research ↗</a></p>
 </main>
+<button type="button" id="motion-toggle" class="motion-control" aria-label="Pause animation" title="Pause animation"><span aria-hidden="true">Ⅱ</span></button>
 </body>
 </html>

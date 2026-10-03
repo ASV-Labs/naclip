@@ -19,11 +19,11 @@ npm exec --yes --package=tailwindcss@3.4.19 -- tailwindcss --config landing/tail
 node --check landing/script.js
 ```
 
-Navigation links point directly to the repository and source documents. The two scenes work with their buttons, wheel, Arrow keys or Page Up/Down. Pause stops decorative video playback. OS reduced motion starts paused and skips the curtain reveal. `?motion=off` also starts with motion disabled; Play is an explicit opt-in. Content and install links do not depend on video or application JavaScript.
+Navigation links point directly to the repository and source documents. The introduction starts automatically after the curtain reveal: Skin plays once, transitions into Your setup, then holds the final frame. It never loops. The small top-right control pauses/resumes and becomes Replay animation when finished. The chapter buttons, wheel, Arrow keys and Page Up/Down remain optional shortcuts. Opening the mobile menu or leaving the tab suspends playback. OS reduced motion and `?motion=off` start with motion disabled and skip the reveal; Play is an explicit opt-in. Browsers that reject muted autoplay also show the small Play control. Content and install links do not depend on video or application JavaScript.
 
 ## Publish
 
-`.github/workflows/pages.yml` uploads only index.html, styles.css, script.js and the two credited logo assets. Design notes stay in Git, outside the published bundle. Full gate receipts remain local and ignored. Changes to landing/ on main redeploy through GitHub Pages.
+`.github/workflows/pages.yml` uploads only index.html, styles.css, script.js and the credited logos and social-card images. Design notes stay in Git, outside the published bundle. Full gate receipts remain local and ignored. Changes to landing/ on main redeploy through GitHub Pages.
 
 The original external decorative videos remain hosted at their supplied URLs. Text and navigation work if those assets are unavailable. Logos and their owner credits are documented in [third-party notices](../THIRD-PARTY-NOTICES.md).
 

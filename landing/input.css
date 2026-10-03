@@ -109,3 +109,18 @@ body:not(.interactive) .scene-controls, body:not(.interactive) #mobile-menu-btn 
 .brand-bg-5794E2-40 { background-color: rgba(87,148,226,0.4); }
 .brand-bg-5794E2-60 { background-color: rgba(87,148,226,0.6); }
 .brand-bg-4a84d0-hover:hover { background-color: #4a84d0; }
+
+/* A single Skin → Setup pass, with a quiet corner transport. */
+.scene-panel { opacity: 0; visibility: hidden; pointer-events: none; transform: translateY(24px); transition: opacity .3s ease, transform .3s ease, visibility .3s; }
+.scene-panel.is-active { opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0); transition: opacity .65s ease .25s, transform .65s ease .25s, visibility 0s; }
+#hero2-stats.scene-panel { transform: translateY(calc(-50% + 24px)); }
+#hero2-stats.scene-panel.is-active { transform: translateY(-50%); }
+body.intro .scene-panel { opacity: 0; transform: translateY(24px); }
+body.intro #navbar-wrapper { opacity: 0; transform: translateY(-16px); pointer-events: none; }
+.motion-control { position: fixed; top: 24px; right: 24px; z-index: 60; display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(0,0,0,.35); color: white; backdrop-filter: blur(10px); font-size: 14px; transition: opacity .4s ease, background .2s ease; }
+.motion-control:hover { background: rgba(255,255,255,.2); }
+.motion-control.replay { padding: 0 16px; font-size: 12px; }
+body.intro .motion-control { opacity: 0; pointer-events: none; }
+body:not(.interactive) .motion-control { display: none; }
+@media (max-width: 1100px) { .motion-control { top: 104px; } }
+@media (max-width: 767px) { .motion-control { top: 88px; right: 18px; } }
