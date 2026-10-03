@@ -82,7 +82,7 @@ If an existing layout hides chat/editor panes, use Hermes’s **Reset layout** c
 
 ## 4. Enable NaCLip and configure the test
 
-Open test-instance **Capabilities → Plugins**. Confirm NaCLip is discovered and enable it if required by your SDK version. Use the command palette's **Reload desktop plugins** if the plugin was copied after startup. Use the **Customize appearance** palette widget or **NaCLip: Customize appearance** command to choose a palette and widget treatment. Close appearance returns to the chat. Native Settings → Appearance → Theme also lists the saved palette. Duplicate-link preferences apply with the skin; Hermes may retain reserved navigation entries.
+Open test-instance **Capabilities → Plugins**. Confirm NaCLip is discovered and enable it if required by your SDK version. Use the command palette's **Reload desktop plugins** if the plugin was copied after startup. Use the **Customize appearance** palette widget or **NaCLip: Customize appearance** command to choose a palette and widget treatment. The top-right **X** closes appearance and stays visible while its form scrolls. **Agent’s computer** opens its own main workspace; its **X** returns to the prior view. Native Settings → Appearance → Theme also lists the saved palette. Duplicate-link preferences apply with the skin; Hermes may retain reserved navigation entries.
 
 Configure providers and local model endpoints through native Settings. Connect only to test backends whose profile ownership you can verify. The plugin reveals native Bots; the Bots plugin itself must be available/enabled. Core model selection stays in Hermes's composer.
 

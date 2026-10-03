@@ -22,10 +22,12 @@ try {
 }catch{}
 export const preview=atom({route:'/',draft:'',messages:[],dark:true,computer:true,tab:'chat',toast:'',scenario:'off',themeName:'naclip-custom',tidy:false,instance:'local',profile:'vision',mode:'sessions',chatId:'session-1',contexts:{},sessionMeta:{},sessionView:'active',query:'',panel:null,pendingDelete:null,attachments:[],effort:'medium',language:'en',...saved,...(saved.contexts?.[contextKey(saved)]||{})})
 preview.subscribe(()=>{try{localStorage.setItem(storageKey,JSON.stringify(snapshot(preview.get())))}catch{/* Private browsing or storage limits: current state remains usable. */}})
+export const workspace=atom(null)
+export function closeWorkspace(){const active=workspace.get();if(active){workspace.set(null);active.onClose?.()}}
 export function update(v){preview.set({...preview.get(),...v})}
 export function currentSelection(s=preview.get()){return s.contexts[contextKey(s)]?.selection||{provider:instances.find(i=>i.id===s.instance).defaultProvider,model:catalogs[instances.find(i=>i.id===s.instance).defaultProvider][0].id}}
 export function selectModel(selection){const s=preview.get();update({contexts:{...s.contexts,[contextKey(s)]:{...s.contexts[contextKey(s)],draft:s.draft,messages:s.messages,attachments:s.attachments,selection}}})}
-export function selectContext(patch){const s=preview.get(),saved=saveCurrent(s),next={...s,...patch};if(next.chatId.startsWith('session-')&&(s.sessionMeta[contextKey(next)]?.archived||s.sessionMeta[contextKey(next)]?.deleted))next.chatId=sessionRows(next)[0]?.id||`session-${crypto.randomUUID()}`;const restored=saved[contextKey(next)]||{};update({...patch,chatId:next.chatId,contexts:saved,draft:restored.draft||'',messages:restored.messages||[],attachments:restored.attachments||[],route:'/',tab:'chat',panel:null});location.hash='/';host.state.profile.set(next.profile);host.state.focusedSessionProfile.set(next.profile);status={...status,profile:next.profile,profile_key:`preview:${next.instance}:${next.profile}`,lease:{holder:'agent'}}}
+export function selectContext(patch){closeWorkspace();const s=preview.get(),saved=saveCurrent(s),next={...s,...patch};if(next.chatId.startsWith('session-')&&(s.sessionMeta[contextKey(next)]?.archived||s.sessionMeta[contextKey(next)]?.deleted))next.chatId=sessionRows(next)[0]?.id||`session-${crypto.randomUUID()}`;const restored=saved[contextKey(next)]||{};update({...patch,chatId:next.chatId,contexts:saved,draft:restored.draft||'',messages:restored.messages||[],attachments:restored.attachments||[],route:'/',tab:'chat',panel:null});location.hash='/';host.state.profile.set(next.profile);host.state.focusedSessionProfile.set(next.profile);status={...status,profile:next.profile,profile_key:`preview:${next.instance}:${next.profile}`,lease:{holder:'agent'}}}
 export function sessionAction(target,action){preview.set(applySessionAction(preview.get(),target,action));if(preview.get().route==='/')location.hash='/';notify(action==='delete'?'Chat deleted from this preview.':action==='archive'?'Chat archived. Find it in Archived.':'Chat restored to Chats.')}
 let toastTimer
 export function notify(message){update({toast:message});clearTimeout(toastTimer);toastTimer=setTimeout(()=>update({toast:''}),4500)}
@@ -48,7 +50,13 @@ async function request(method,params={}){
 }
 export const host={state:{profile:atom(preview.get().profile),focusedSessionProfile:atom(preview.get().profile)},profileRoutes:async()=>[],request,
  onEvent:(name,fn)=>{if(!handlers.has(name))handlers.set(name,new Set());handlers.get(name).add(fn);return()=>handlers.get(name).delete(fn)},
- navigate:route=>{location.hash=route;update({route,tab:'chat',panel:null})},newChat:()=>selectContext({chatId:`session-${crypto.randomUUID()}`,mode:'sessions',sessionView:'active'}),openWorkspace:id=>{if(id==='tandem:appearance')host.navigate('/settings?tab=config:appearance&page=theme');else update({computer:true,tab:'computer'});return()=>{}},
+ navigate:route=>{closeWorkspace();location.hash=route;update({route,tab:'chat',panel:null})},newChat:()=>selectContext({chatId:`session-${crypto.randomUUID()}`,mode:'sessions',sessionView:'active'}),openWorkspace:(id,options)=>{
+   closeWorkspace()
+   const active={id,...options}
+   workspace.set(active)
+   update({panel:null,tab:'chat'})
+   return()=>{if(workspace.get()===active)closeWorkspace()}
+ },
  paneVisibility:id=>({get:()=>id==='hermes-bots:pane'&&preview.get().mode==='bots',subscribe:preview.subscribe}),
  revealPane:id=>{if(id==='hermes-bots:pane')update({mode:'bots',panel:window.innerWidth<1120?'roster':null,query:''});else if(id==='sessions')update({mode:'sessions',panel:window.innerWidth<1120?'roster':null,query:''});else {host.navigate('/');update({computer:true,tab:'computer'})}},
  composer:{insertText:async(_,text)=>{update({draft:[preview.get().draft,text].filter(Boolean).join('\n')});return true},focus:()=>document.querySelector('textarea')?.focus()},

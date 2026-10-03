@@ -46,3 +46,11 @@ Seven preview tests, five launcher tests, routing checks, appearance validation 
 The redesigned capability explorer and extra Tools filters are still browser-only; native Hermes retains its own capability pages. The skin’s native search improvement is cosmetic. Mobile browser support is not a packaged mobile client.
 
 The local design rubric remains **3.65/5, below its 4.0 acceptance threshold**. The static design verifier also reports limitations scanning this React source/dist setup. Publication is an experimental owner-requested release; no formal design pass, full native parity, or live Docker acceptance is claimed.
+
+## 0.4.1 usability patch
+
+Agent’s computer now opens a closeable main workspace using `host.openWorkspace`, rather than silently re-revealing its existing side pane. Native checks opened it from Artifacts and Capabilities, repeated the shortcut without creating a second tab, and closed it back to the prior route. The main tab temporarily replaces the side pane’s viewer to avoid competing screen/control state. Older SDKs receive explicit fallback guidance. The isolated profile correctly remains unsupported/unconfigured for a live computer sandbox; this patch does not configure Docker or prove an RFB session.
+
+Appearance now has a persistent header and a labeled top-right X (44×44px). Native scrolling and closure passed. The browser adapter renders the actual plugin workspace rather than redirecting the palette shortcut to a different settings screen. Desktop 1440×1000, tablet 834×1112 and mobile 390×844 checks passed for computer open/close, keyboard appearance closure, persistent X after form scrolling and absence of document overflow. A React list-key warning in the rail was also corrected. Native core Settings is its own full-screen overlay and retains its own close control.
+
+Regression check: `node tandem/scripts/check-workspaces.mjs` covers modern main-workspace navigation, close disposal, stable tab identity and explicit legacy SDK fallback. Existing checks and SDK admission were rerun. The daily Hermes home and configuration were not modified. The existing formal composition evaluation remains below its design acceptance threshold; this functional patch does not change that verdict.

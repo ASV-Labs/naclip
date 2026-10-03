@@ -64,7 +64,7 @@ The revised runtime plugin is [`plugin.js`](plugin.js). It uses the Hermes plugi
 
 In a compatible Hermes Desktop, open **Capabilities → Plugins → Install from Git** and enter `https://github.com/ASV-Labs/naclip`. Enable **NaCLip**. The root `plugin.js` is the installable desktop entry; no preview build is needed. Try the isolated test first, because installing in your daily instance changes that instance’s appearance.
 
-Use **Customize appearance** (the palette widget above Settings) or the command **NaCLip: Customize appearance** for theme and widget editing. The pane has Close appearance and a link to native Hermes appearance settings. Core Settings retains its own close control.
+Use **Customize appearance** (the palette widget above Settings) or the command **NaCLip: Customize appearance** for theme and widget editing. The pane has a persistent top-right **X** and a link to native Hermes appearance settings. **Agent’s computer** opens a closeable main workspace, including from Capabilities. Core Settings retains its own close control.
 
 If panes are missing or overlap after first installation, use the command palette’s **Reset layout**. This resets your pane arrangement, so record a layout you want to retain before using it. Native pane placement is managed by Hermes.
 

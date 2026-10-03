@@ -11,7 +11,7 @@ import { jsx, jsxs, Fragment } from 'react/jsx-runtime'
 const { host, cn, icons, useValue, atom, Button, Input } = sdk
 
 const ID = 'tandem'
-const VERSION = '0.4.0'
+const VERSION = '0.4.1'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Theme
@@ -201,6 +201,8 @@ export async function draftAppearancePrompt(description) {
 
 let pluginCtx = null
 let closeAppearanceWorkspace = null
+let closeComputerWorkspace = null
+const $computerWorkspaceOpen = atom(false)
 
 /** The viewer this window holds on the agent's screen, if a computer view is mounted. */
 const $viewer = atom(null) // { profile, viewerId, hash } | null
@@ -923,13 +925,43 @@ function ComputerView() {
 // Rail
 // ─────────────────────────────────────────────────────────────────────────────
 
+// --- workspace-navigation:begin ---
 function openComputer() {
-  if (typeof host.revealPane === 'function') { host.revealPane(`${ID}:computer`); return }
   if (typeof host.openWorkspace === 'function') {
-    host.openWorkspace(`${ID}:computer-main`, { title: 'Computer', minWidth: 420, render: () => jsx(ComputerView, {}) })
-  } else {
-    host.notify({ kind: 'info', message: 'The computer pane is on the right. Use Reset layout if you closed it.' })
+    closeComputerWorkspace = host.openWorkspace(`${ID}:computer-main`, {
+      title: 'Agent’s computer', minWidth: '22rem',
+      onClose: () => { closeComputerWorkspace = null; $computerWorkspaceOpen.set(false) },
+      render: () => element('div', {className:'skin-computer-workspace'}, [
+        workspaceHeader('Agent’s computer', 'Close computer', () => closeComputerWorkspace?.()),
+        element('div', {className:'skin-computer-workspace-body'}, jsx(ComputerView, {}))
+      ])
+    })
+    $computerWorkspaceOpen.set(true)
+    return
   }
+  if (typeof host.revealPane === 'function') {
+    host.revealPane(`${ID}:computer`)
+    host.notify({kind:'info',message:'Computer pane revealed. If the current page covers it, return to your chat to view it.'})
+    return
+  }
+  host.notify({kind:'info',message:'This Hermes version cannot open the computer view. Update Hermes Desktop to use the computer workspace.'})
+}
+// --- workspace-navigation:end ---
+
+function ComputerPane() {
+  const inWorkspace = useValue($computerWorkspaceOpen)
+  // Mount only one live viewer: two copies would compete for the viewer/lease state.
+  return inWorkspace
+    ? jsx(Notice, {title:'Computer open in main workspace',body:'Close the computer tab to return its screen here.'})
+    : jsx(ComputerView, {})
+}
+
+function workspaceHeader(title, closeLabel, close) {
+  return element('header', {className:'skin-workspace-header'}, [
+    element('strong', {}, title),
+    element('button', {type:'button',className:'skin-workspace-close','aria-label':closeLabel,title:closeLabel,onClick:close},
+      element('span', {'aria-hidden':true}, '×'))
+  ])
 }
 
 function openBots() {
@@ -947,11 +979,14 @@ function openAppearance() {
     minWidth: '22rem',
     onClose: () => { closeAppearanceWorkspace = null },
     render: () => element('div', {className:'skin-appearance-workspace'}, [
-      element('div', {className:'skin-inline-actions'}, [
-        element('button', {type:'button',className:'skin-button',onClick:()=>host.navigate('/settings?tab=config:appearance')}, 'Hermes appearance settings'),
-        element('button', {type:'button',className:'skin-button',onClick:()=>closeAppearanceWorkspace?.()}, 'Close appearance')
-      ]),
-      jsx(AppearanceSettings,{})
+      workspaceHeader('NaCLip appearance', 'Close appearance', () => closeAppearanceWorkspace?.()),
+      element('div', {className:'skin-workspace-body'}, [
+        element('button', {type:'button',className:'skin-button',onClick:()=>{
+          closeAppearanceWorkspace?.()
+          host.navigate('/settings?tab=config:appearance')
+        }}, 'Hermes appearance settings'),
+        jsx(AppearanceSettings,{})
+      ])
     ])
   })
 }
@@ -1016,7 +1051,7 @@ function Rail() {
  const contents=wide=>[
   jsx('button',{type:'button',className:'skin-rail-expand','aria-label':wide?'Collapse widget sidebar':'Expand widget sidebar','aria-expanded':expanded,'aria-controls':'naclip-expanded-widgets',onClick:()=>toggle(!expanded),children:wide?'‹  Collapse sidebar':'›'},'expand'),
   jsx('div',{className:'skin-widget-list',children:widgets.map((item,i)=>jsx(RailTile,{item,index:i,expanded:wide,active:item.id==='bots'?botsActive:!!item.route&&(item.route==='/'?route==='/':route.startsWith(item.route))},item.id))},'widgets'),
-  element('div',{className:'skin-rail-settings'},[
+  element('div',{key:'settings-group',className:'skin-rail-settings'},[
    jsx(RailTile,{item:{id:'appearance',label:'Customize appearance',icon:'Palette',color:'#638D87',run:openAppearance},index:10,expanded:wide},'appearance'),
    jsx(RailTile,{item:settings,index:9,expanded:wide,active:route.startsWith('/settings')},'settings')
   ])
@@ -1241,7 +1276,15 @@ const CHROME_CSS = `
 .skin-expanded-rail:not(:popover-open){display:none}.skin-expanded-rail::backdrop{background:transparent;pointer-events:none}
 .skin-rail-expand{display:flex;align-items:center;justify-content:center;min-height:44px;flex:none;border-radius:8px;font-size:20px;color:var(--ui-text-secondary)}.skin-expanded-rail .skin-rail-expand{justify-content:flex-start;font-size:12px;padding:0 12px}.skin-rail-expand:hover{background:var(--ui-bg-elevated)}
 .skin-widget-list{display:flex;flex-direction:column;align-items:stretch;gap:8px;overflow:auto;overflow-x:hidden;flex:1;min-height:0;padding:3px 2px;scrollbar-width:thin}.skin-widget-list>span{display:block}
-.skin-rail-settings{display:flex;flex-direction:column;gap:8px}.skin-rail-settings>span{display:block}.skin-appearance-workspace{height:100%;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:20px;background:var(--ui-bg);color:var(--ui-text-primary)}
+.skin-rail-settings{display:flex;flex-direction:column;gap:8px}.skin-rail-settings>span{display:block}.skin-appearance-workspace,.skin-computer-workspace{height:100%;min-height:0;display:flex;flex-direction:column;background:var(--ui-bg);color:var(--ui-text-primary)}
+.skin-workspace-header{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 12px 8px 20px;border-bottom:1px solid var(--ui-stroke-secondary);background:var(--ui-bg-elevated)}
+.skin-workspace-header strong{font-size:14px;line-height:1.4}
+.skin-workspace-close{flex:none;width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--ui-stroke-secondary);border-radius:10px;background:var(--ui-bg);color:var(--ui-text-primary);cursor:pointer;font-size:28px;line-height:1}
+.skin-workspace-close:hover{background:var(--ui-bg-hover);border-color:var(--ui-accent)}
+.skin-workspace-close:focus-visible{outline:2px solid var(--ui-accent);outline-offset:2px}
+.skin-workspace-body{flex:1;min-height:0;overflow:auto;padding:24px;display:flex;flex-direction:column;gap:20px}
+.skin-computer-workspace-body{flex:1;min-height:0;overflow:auto}
+@media(max-width:700px){.skin-workspace-body{padding:16px}.skin-workspace-header{padding-left:16px}}
 .skin-rail-item{display:flex;align-items:center;gap:11px;flex:none;min-height:44px;padding:0 2px;width:48px;border-radius:9px;text-align:left;color:var(--ui-text-primary)}.skin-rail-item.with-label{width:100%;padding:0 2px}.skin-widget-label{font-size:12px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.skin-rail-item .tandem-tile{flex:none;color:var(--tile-ink)}.skin-rail-item.with-label:hover{background:var(--ui-bg-elevated)}.skin-rail-item.is-active .tandem-tile{box-shadow:0 0 0 2px var(--ui-accent)}.skin-rail-item:focus-visible,.skin-rail-expand:focus-visible{outline:2px solid var(--ui-accent);outline-offset:-1px}
 [data-style='outline'] .tandem-tile{background:transparent;color:var(--ui-text-secondary);border:1px solid var(--ui-stroke-secondary);box-shadow:none}[data-style='outline'] .is-active .tandem-tile{color:var(--ui-accent)}[data-style='mono'] .tandem-tile{background:var(--ui-accent);color:var(--skin-accent-ink,#fff);box-shadow:none}[data-shape='circle'] .tandem-tile{border-radius:50%}[data-shape='square'] .tandem-tile{border-radius:4px}
 .skin-appearance{font-size:12px;display:flex;flex-direction:column;gap:14px;max-width:760px}.skin-settings-heading h3{font-size:19px;margin:0}.skin-settings-heading p,.skin-help{font-size:12px;line-height:1.6;color:var(--ui-text-secondary);margin:6px 0}.skin-palette-choices,.skin-pack-choices,.skin-inline-actions,.skin-apply-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.skin-button{min-height:44px;padding:8px 14px;border:1px solid var(--ui-stroke-secondary);border-radius:8px;color:var(--ui-text-primary);background:var(--ui-bg)}.skin-button[aria-pressed='true']{border-color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}.skin-button:hover{background:var(--ui-bg-elevated)}.skin-button[data-primary]{background:var(--ui-accent);color:var(--skin-accent-ink,#fff)}.skin-button:focus-visible{outline:2px solid var(--ui-accent)}.skin-button:disabled{opacity:.45;cursor:default}
@@ -1345,7 +1388,7 @@ export default {
         area: 'panes',
         title: 'Computer',
         data: { placement: 'right', dock: { pane: 'workspace', pos: 'right' }, width: '520px' },
-        render: () => jsx(ComputerView, {})
+        render: () => jsx(ComputerPane, {})
       },
       {
         id: 'dock',
@@ -1385,6 +1428,9 @@ export default {
       document.documentElement.style.removeProperty('--skin-accent-ink')
       closeAppearanceWorkspace?.()
       closeAppearanceWorkspace = null
+      closeComputerWorkspace?.()
+      closeComputerWorkspace = null
+      $computerWorkspaceOpen.set(false)
       disposeNavPrefs()
       disposeCustomTheme()
       $railExpanded.set(false)

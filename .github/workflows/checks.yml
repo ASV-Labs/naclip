@@ -20,6 +20,7 @@ jobs:
         working-directory: localhost-preview
       - run: node tandem/scripts/check-routing.mjs
       - run: node tandem/scripts/check-appearance.mjs
+      - run: node tandem/scripts/check-workspaces.mjs
       - run: python3 scripts/test-launcher.py
         env:
           PYTHONDONTWRITEBYTECODE: '1'
