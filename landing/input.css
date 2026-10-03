@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body { font-family: Helvetica, Arial, sans-serif; background: #010101; }
+[hidden], #splash { display: none !important; }
+body.intro #splash { display: flex !important; pointer-events: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+a, button { touch-action: manipulation; }
+button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
+#navbar-wrapper nav a, #mobile-menu-btn { min-height: 44px; }
+#mobile-menu-btn { min-width: 44px; }
+#mobile-overlay { overflow: auto; padding: 100px 24px 70px; }
+#mobile-overlay a { min-height: 44px; display: flex; align-items: center; }
+#video1, #video2 { transition: opacity .65s ease; }
+#video2 { opacity: 0; }
+.scene-shade { background: linear-gradient(180deg,rgba(0,0,0,.38),transparent 35%,rgba(0,0,0,.72)); }
+.eyebrow { margin-bottom: 22px; color: rgba(255,255,255,.8); text-transform: uppercase; font-size: 11px; letter-spacing: .18em; }
+#hero1-content { bottom: 128px; max-width: 750px; }
+#hero1-content h1 { font-size: clamp(38px,5vw,72px); }
+#hero1-content > p:not(.eyebrow) { color: rgba(255,255,255,.85); }
+#hero1-content > a { display: inline-flex; align-items: center; min-height: 48px; }
+#hero1-card { bottom: 128px; }
+#hero1-card a { width: 44px; height: 44px; }
+#hero1-card a:focus-visible { outline-color: #2563eb; }
+.salt-mark { width: 100%; height: 100%; background: #eaf1fa; display: grid; place-content: center; color: #24446e; font-size: 24px; line-height: 1.1; letter-spacing: -.05em; }
+.salt-mark span:nth-child(2) { padding-left: 22px; color: #5794e2; }
+#hero2-content { bottom: 130px; }
+#hero2-content > p { color: rgba(255,255,255,.85); }
+#hero2-stats { transform: translateY(-50%); }
+#hero2-stats span:nth-child(2), #hero2-content span:nth-child(2) { color: rgba(255,255,255,.8); }
+.scene-controls { position: absolute; bottom: 36px; left: 48px; display: flex; gap: 6px; z-index: 20; }
+.scene-controls button { border: 1px solid transparent; border-radius: 999px; color: rgba(255,255,255,.8); padding: 0 16px; min-height: 44px; font-size: 12px; background: rgba(0,0,0,.35); backdrop-filter: blur(10px); }
+.scene-controls button[aria-pressed=true] { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.14); color: white; }
+.scene-controls button:hover { background: rgba(255,255,255,.22); }
+.scene-controls button span { margin-left: 8px; }
+.verification-note { position: absolute; right: 48px; bottom: 51px; color: rgba(255,255,255,.8); font-size: 11px; z-index: 20; }
+.verification-note a:hover { text-decoration: underline; }
+@media (max-width: 1100px) {
+ #hero1-content { max-width: 57%; }
+ #hero1-content h1 { font-size: clamp(38px,5.2vw,58px); }
+ #hero1-card { right: 32px; max-width: 300px; gap: 14px; }
+ #hero2-stats { top: 33%; }
+ .verification-note { right: 24px; }
+ .scene-controls { left: 24px; }
+}
+@media (max-width: 767px) {
+ #hero1-content { left: 24px; right: 24px; max-width: none; bottom: 146px; }
+ #hero1-content h1 { font-size: clamp(38px,7vw,54px); }
+ #hero1-content > p:not(.eyebrow), #hero2-content > p { font-size: 14px; }
+ #hero1-card { display: none; }
+ #hero2-content { bottom: 146px; }
+ #hero2-stats { display: none; }
+ #hero2-content > div { display: flex; }
+ #hero2-content h2 { font-size: 40px; }
+ #hero2-content > div { gap: 20px; }
+ .scene-controls { bottom: 62px; left: 18px; right: 18px; justify-content: center; gap: 4px; }
+ .scene-controls button { padding: 0 12px; }
+ .verification-note { bottom: 25px; left: 16px; right: 16px; text-align: center; font-size: 10px; }
+ .eyebrow { margin-bottom: 16px; }
+}
+@media (max-height: 650px) and (min-width: 768px) {
+ #hero1-content, #hero1-card { bottom: 104px; }
+ #hero1-content h1 { font-size: 48px; }
+ #hero2-content { bottom: 100px; }
+ #hero2-content h2 { font-size: 42px; }
+ #hero2-stats { gap: 16px; top: 45%; }
+}
+@media (max-height: 580px) and (max-width: 767px) {
+ #hero1-content, #hero2-content { bottom: 110px; }
+ #hero1-content h1, #hero2-content h2 { font-size: 30px; }
+ #hero1-content h1, #hero1-content p { margin-bottom: 10px; }
+ .eyebrow { display: none; }
+ #hero2-content > div { margin-top: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+ *, *::before, *::after { transition: none !important; animation: none !important; }
+ body.intro #splash { display: none !important; }
+}
+#hero2-stats a, #hero2-content > div a { display: inline-flex; min-height: 44px; align-items: center; }
+#hero2-stats a:hover, #hero2-content > div a:hover { text-decoration: underline; }
+#hero1-card .hermes-credit { display: flex; width: 100%; height: 100%; background: #f4f8fc; align-items: center; justify-content: center; }
+.hermes-credit img { width: 100%; height: 100%; object-fit: contain; }
+.owner-credit { display: inline-flex; align-items: center; gap: 7px; margin-top: 8px; min-height: 44px; }
+.owner-credit img { width: 18px; height: 25px; object-fit: contain; border-radius: 2px; background: white; }
+.verification-note { bottom: 32px; }
+@media (max-width: 767px) {
+ .verification-note { bottom: 12px; }
+ .owner-credit { margin-top: 0; min-height: 26px; }
+ .owner-credit img { width: 12px; height: 17px; }
+ .scene-controls { bottom: 86px; }
+ #hero1-content, #hero2-content { bottom: 170px; }
+}
+.verification-note > a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 767px) {
+ .verification-note { bottom: 6px; }
+ .owner-credit { min-height: 44px; }
+ .scene-controls { bottom: 114px; }
+ #hero1-content, #hero2-content { bottom: 196px; }
+}
+
+.motion-reduced *, .motion-reduced *::before, .motion-reduced *::after { transition: none !important; animation: none !important; }
+
+body:not(.interactive) .scene-controls, body:not(.interactive) #mobile-menu-btn { display: none; }
+
+.brand-bg-010101 { background-color: #010101; }
+.brand-bg-3b82f6 { background-color: #3b82f6; }
+.brand-bg-5794E2 { background-color: #5794E2; }
+.brand-bg-5794E2-40 { background-color: rgba(87,148,226,0.4); }
+.brand-bg-5794E2-60 { background-color: rgba(87,148,226,0.6); }
+.brand-bg-4a84d0-hover:hover { background-color: #4a84d0; }

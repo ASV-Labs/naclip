@@ -20,3 +20,5 @@ localhost-preview/REVIEW.md
 
 __pycache__/
 *.pyc
+
+landing/gate-receipts/

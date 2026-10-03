@@ -6,10 +6,12 @@
 
 A customizable Hermes Desktop plugin by **ASV Labs**.
 
+**[Visit the NaCLip landing page →](https://asv-labs.github.io/naclip/)**
+
 [![Checks](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml/badge.svg)](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[Install](#install-in-hermes-desktop) · [Screenshots](docs/SCREENSHOTS.md) · [Customization](docs/APPEARANCE.md) · [Verification](docs/RELEASE-AUDIT.md)
+[Website](https://asv-labs.github.io/naclip/) · [Install](#install-in-hermes-desktop) · [Screenshots](docs/SCREENSHOTS.md) · [Customization](docs/APPEARANCE.md) · [Verification](docs/RELEASE-AUDIT.md)
 
 </div>
 
@@ -126,4 +128,4 @@ Provider credentials, account state, real conversations, app binaries and local 
 
 ## License and credits
 
-[MIT](LICENSE) · [Third-party notices](THIRD-PARTY-NOTICES.md). NaCLip is an ASV Labs project and is not affiliated with Nous Research. Hermes and Docker retain their own licenses and requirements.
+[MIT](LICENSE) · [Third-party notices](THIRD-PARTY-NOTICES.md). NaCLip is an independent ASV Labs project. [Hermes Agent](https://github.com/NousResearch/hermes-agent) and its logos belong to [Nous Research](https://nousresearch.com/); use here identifies compatibility, not affiliation or endorsement. Hermes and Docker retain their own licenses and requirements.

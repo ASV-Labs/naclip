@@ -23,3 +23,12 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Landing page identity and media
+
+Hermes Agent and Nous Research names and logos belong to their respective owners. The two PNG logos in `landing/assets/` were supplied for identifying compatibility with Hermes. They are not NaCLip's brand assets, and this repository's MIT license does not grant trademark rights. NaCLip is an independent ASV Labs plugin, not an official Nous Research product or endorsement.
+
+- [Hermes Agent](https://github.com/NousResearch/hermes-agent)
+- [Nous Research](https://nousresearch.com/)
+
+The landing page preserves decorative background videos from the user-supplied HTML reference. These are loaded from their original CloudFront URLs; no video files are included in the repository. They are visual atmosphere, not product screenshots or evidence of Hermes functionality. The local stylesheet is compiled with MIT-licensed Tailwind CSS 3.4.19; the website has no runtime Tailwind dependency.

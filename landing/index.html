@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NaCLip | Make the desk yours</title>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: Helvetica, Arial, sans-serif; }
+  </style>
+  <meta name="description" content="NaCLip is a customizable Hermes Desktop skin by ASV Labs. Graphite, Ocean and Paper themes, widget packs, and native appearance tools. Experimental, verified in an isolated macOS test." />
+  <meta name="theme-color" content="#010101" />
+  <link rel="canonical" href="https://asv-labs.github.io/naclip/" />
+  <meta property="og:title" content="NaCLip | Make the desk yours" />
+  <meta property="og:description" content="Your skin for Hermes. Themes, widget packs and appearance tools by ASV Labs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://asv-labs.github.io/naclip/" />
+  <meta property="og:image" content="https://raw.githubusercontent.com/ASV-Labs/naclip/main/docs/screenshots/native-appearance-paper.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<!-- Splash Screen -->
+<div id="splash" aria-hidden="true" class="fixed inset-0 z-[9999] flex items-center justify-center">
+  <div id="curtain-left" class="absolute top-0 left-0 w-1/2 h-full brand-bg-010101 transition-transform duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)]" style="transform: translateX(0)"></div>
+  <div id="curtain-right" class="absolute top-0 right-0 w-1/2 h-full brand-bg-010101 transition-transform duration-[1200ms] ease-[cubic-bezier(0.76,0,0.24,1)]" style="transform: translateX(0)"></div>
+  <div id="loader-content" class="absolute bottom-12 left-0 right-0 px-12 text-white/60 text-xs tracking-[0.2em] uppercase">NaCLip · ASV Labs</div>
+</div>
+
+<!-- Navbar -->
+<div id="navbar-wrapper" class="fixed top-4 sm:top-6 left-0 right-0 z-50 flex justify-center px-4 transition-all duration-700 delay-300 ">
+  <nav aria-label="Main navigation" class="flex items-center gap-1 bg-white/10 backdrop-blur-md border border-white/15 rounded-full px-2 py-2 w-full sm:w-auto justify-between sm:justify-start">
+    <div class="text-white text-base font-medium tracking-tight font-helvetica px-3 sm:px-4">
+      <span class="font-bold">NaCL</span><span class="font-light">ip</span>
+    </div>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/APPEARANCE.md#themes-and-custom-colors" target="_blank" rel="noopener noreferrer" class="text-white/80 text-sm hover:text-white hover:bg-white/10 transition-all px-4 py-1.5 rounded-full font-helvetica">Themes</a>
+      <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/APPEARANCE.md" target="_blank" rel="noopener noreferrer" class="text-white/80 text-sm hover:text-white hover:bg-white/10 transition-all px-4 py-1.5 rounded-full font-helvetica">Widgets</a>
+      <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/SCREENSHOTS.md" target="_blank" rel="noopener noreferrer" class="text-white/80 text-sm hover:text-white hover:bg-white/10 transition-all px-4 py-1.5 rounded-full font-helvetica">Screenshots</a>
+      <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/RELEASE-AUDIT.md" target="_blank" rel="noopener noreferrer" class="text-white/80 text-sm hover:text-white hover:bg-white/10 transition-all px-4 py-1.5 rounded-full font-helvetica">Verification</a>
+      <a href="https://github.com/ASV-Labs/naclip" target="_blank" rel="noopener noreferrer" class="text-white/80 text-sm hover:text-white hover:bg-white/10 transition-all px-4 py-1.5 rounded-full font-helvetica">GitHub</a>
+    </div>
+    <a href="https://github.com/ASV-Labs/naclip#install-in-hermes-desktop" target="_blank" rel="noopener noreferrer" class="hidden sm:flex items-center gap-2 brand-bg-5794E2 text-white text-sm px-5 py-2 rounded-full brand-bg-4a84d0-hover transition-all font-helvetica ml-2">
+      Install NaCLip
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+    </a>
+    <button id="mobile-menu-btn" aria-label="Open navigation" aria-expanded="false" aria-controls="mobile-overlay" class="md:hidden flex items-center justify-center w-9 h-9 rounded-full bg-white/10 text-white">
+      <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+      <svg id="close-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </button>
+  </nav>
+</div>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-overlay" hidden inert class="fixed inset-0 z-40 bg-black/90 backdrop-blur-lg md:hidden flex flex-col items-center justify-center gap-6 transition-all duration-300 opacity-0 pointer-events-none">
+  <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/APPEARANCE.md#themes-and-custom-colors" target="_blank" rel="noopener noreferrer" class="mobile-link text-white text-2xl font-light font-helvetica hover:text-white/70 transition-colors">Themes</a>
+  <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/APPEARANCE.md" target="_blank" rel="noopener noreferrer" class="mobile-link text-white text-2xl font-light font-helvetica hover:text-white/70 transition-colors">Widgets</a>
+  <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/SCREENSHOTS.md" target="_blank" rel="noopener noreferrer" class="mobile-link text-white text-2xl font-light font-helvetica hover:text-white/70 transition-colors">Screenshots</a>
+  <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/RELEASE-AUDIT.md" target="_blank" rel="noopener noreferrer" class="mobile-link text-white text-2xl font-light font-helvetica hover:text-white/70 transition-colors">Verification</a>
+  <a href="https://github.com/ASV-Labs/naclip" target="_blank" rel="noopener noreferrer" class="mobile-link text-white text-2xl font-light font-helvetica hover:text-white/70 transition-colors">GitHub</a>
+  <a href="https://github.com/ASV-Labs/naclip#install-in-hermes-desktop" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 brand-bg-5794E2 text-white text-sm px-6 py-3 rounded-full brand-bg-4a84d0-hover transition-all font-helvetica mt-4">
+    Install NaCLip
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+  </a>
+</div>
+
+<!-- Hero Section -->
+<div aria-hidden="true" class="fixed inset-0 w-full h-full overflow-hidden bg-black">
+  <video id="video1" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true" muted loop playsinline preload="metadata">
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_222559_363e35af-d0bc-4650-b3cb-58bf833daa51.mp4" type="video/mp4" />
+  </video>
+  <video id="video2" class="absolute inset-0 w-full h-full object-cover" aria-hidden="true" muted loop playsinline preload="metadata">
+    <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260619_232048_98292efb-9b9c-4089-a587-72f33437c8f8.mp4" type="video/mp4" />
+  </video>
+  <div class="scene-shade absolute inset-0"></div>
+
+</div>
+<main aria-label="NaCLip introduction" class="fixed inset-0 w-full h-full">
+  <!-- Hero 1 Content - Bottom Left -->
+  <div id="hero1-content" class="absolute bottom-12 left-6 right-6 sm:bottom-8 sm:left-8 sm:right-auto md:bottom-16 md:left-12 z-10 max-w-2xl" >
+    <p class="eyebrow">NaCLip · By ASV Labs</p>
+    <h1 class="text-white text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-light leading-[1.05] tracking-tight font-helvetica mb-4 md:mb-6">
+      A new look for<br/>Hermes Desktop.
+    </h1>
+    <p class="text-white/70 text-xs sm:text-sm md:text-base leading-relaxed max-w-md mb-6 md:mb-8 font-helvetica">
+      NaCLip brings themes, widget packs and appearance tools to Hermes Desktop. Your agents, models and conversations stay powered by Hermes. The workspace feels like you.
+    </p>
+    <a href="https://github.com/ASV-Labs/naclip#install-in-hermes-desktop" target="_blank" rel="noopener noreferrer" class="brand-bg-5794E2 text-white text-xs sm:text-sm font-medium px-6 sm:px-8 py-3 sm:py-3.5 rounded-full brand-bg-4a84d0-hover transition-all font-helvetica">
+      Install NaCLip
+    </a>
+  </div>
+
+  <!-- Hero 1 - White Card - Bottom Right -->
+  <div id="hero1-card" class="hidden sm:flex absolute bottom-8 right-8 md:bottom-16 md:right-12 bg-white rounded-2xl p-4 md:p-5 items-center gap-4 md:gap-5 shadow-2xl max-w-[380px] md:max-w-[460px] z-10" >
+    <div class="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden flex-shrink-0">
+      <a class="hermes-credit" href="https://github.com/NousResearch/hermes-agent" target="_blank" rel="noopener noreferrer"><img src="assets/hermes-agent.png" width="600" height="608" alt="Hermes Agent, by Nous Research" data-wdi-media-role="identity" /></a>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between gap-4 md:gap-6">
+        <div>
+          <p class="text-[#010101] text-sm font-medium leading-tight font-helvetica">Made for</p>
+          <p class="text-[#010101] text-sm font-medium leading-tight font-helvetica">Hermes Desktop</p>
+        </div>
+        <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/SCREENSHOTS.md" aria-label="View NaCLip screenshots" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full brand-bg-3b82f6 flex items-center justify-center flex-shrink-0">
+          <span aria-hidden="true" class="text-white">↗</span>
+        </a>
+      </div>
+      <p class="text-[#666] text-xs mt-3 font-helvetica">ASV Labs · Experimental plugin</p>
+    </div>
+  </div>
+
+  <!-- Hero 2 Content - Bottom Center -->
+  <div id="hero2-content" class="absolute bottom-12 sm:bottom-12 md:bottom-20 left-0 right-0 z-10 flex flex-col items-center text-center px-6" hidden inert>
+    <h2 class="text-white text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-light leading-[1.1] tracking-tight font-helvetica mb-4 md:mb-5">
+      Same Hermes.<br/>A different feel.
+    </h2>
+    <p class="text-white/70 text-xs sm:text-sm md:text-base leading-relaxed max-w-lg font-helvetica">
+      Choose Graphite, Ocean or Paper. Customize your colors, icons and navigation, or draft a theme with your agent. Apply the skin inside Hermes and keep your existing setup.
+    </p>
+    <!-- Stats mobile -->
+    <div class="flex sm:hidden items-center gap-6 mt-6">
+      <div class="flex flex-col items-center">
+        <span class="text-white text-xl font-light tracking-tight font-helvetica">03</span>
+        <span class="text-white/50 text-[10px] mt-0.5 font-helvetica"><a href="https://github.com/ASV-Labs/naclip/blob/main/docs/APPEARANCE.md#themes-and-custom-colors" target="_blank" rel="noopener noreferrer">Built-in themes ↗</a></span>
+      </div>
+      <div class="w-[1px] h-8 brand-bg-5794E2/40"></div>
+      <div class="flex flex-col items-center">
+        <span class="text-white text-xl font-light tracking-tight font-helvetica">MIT</span>
+        <span class="text-white/50 text-[10px] mt-0.5 font-helvetica"><a href="https://github.com/ASV-Labs/naclip/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Open source ↗</a></span>
+      </div>
+      <div class="w-[1px] h-8 brand-bg-5794E2/40"></div>
+      <div class="flex flex-col items-center">
+        <span class="text-white text-xl font-light tracking-tight font-helvetica">macOS</span>
+        <span class="text-white/50 text-[10px] mt-0.5 font-helvetica"><a href="https://github.com/ASV-Labs/naclip/blob/main/docs/RELEASE-AUDIT.md" target="_blank" rel="noopener noreferrer">Native-tested ↗</a></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero 2 Stats - Right Side Desktop -->
+  <div id="hero2-stats" class="hidden sm:flex absolute right-8 md:right-12 top-1/2 z-10 flex-col gap-8" hidden inert>
+    <div class="flex flex-col items-start">
+      <span class="text-white text-3xl md:text-4xl font-light tracking-tight font-helvetica">03</span>
+      <span class="text-white/50 text-xs md:text-sm mt-1 font-helvetica"><a href="https://github.com/ASV-Labs/naclip/blob/main/docs/APPEARANCE.md#themes-and-custom-colors" target="_blank" rel="noopener noreferrer">Built-in themes ↗</a></span>
+      <div class="w-12 h-[1px] brand-bg-5794E2/60 mt-4"></div>
+    </div>
+    <div class="flex flex-col items-start">
+      <span class="text-white text-3xl md:text-4xl font-light tracking-tight font-helvetica">MIT</span>
+      <span class="text-white/50 text-xs md:text-sm mt-1 font-helvetica"><a href="https://github.com/ASV-Labs/naclip/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">Open source ↗</a></span>
+      <div class="w-12 h-[1px] brand-bg-5794E2/60 mt-4"></div>
+    </div>
+    <div class="flex flex-col items-start">
+      <span class="text-white text-3xl md:text-4xl font-light tracking-tight font-helvetica">macOS</span>
+      <span class="text-white/50 text-xs md:text-sm mt-1 font-helvetica"><a href="https://github.com/ASV-Labs/naclip/blob/main/docs/RELEASE-AUDIT.md" target="_blank" rel="noopener noreferrer">Native-tested ↗</a></span>
+    </div>
+  </div>
+  <div class="scene-controls" aria-label="Explore NaCLip">
+    <button type="button" data-scene="0" aria-pressed="true">01 <span>The skin</span></button>
+    <button type="button" data-scene="1" aria-pressed="false">02 <span>Your setup</span></button>
+    <button type="button" id="motion-toggle" aria-pressed="false" aria-label="Pause background motion">Ⅱ <span>Pause</span></button>
+  </div>
+  <p class="verification-note">Experimental · <a href="https://github.com/ASV-Labs/naclip/blob/main/docs/RELEASE-AUDIT.md" target="_blank" rel="noopener noreferrer">Native macOS test verified · See scope ↗</a><br/><a class="owner-credit" href="https://nousresearch.com/" target="_blank" rel="noopener noreferrer"><img src="assets/nous-research.png" alt="" data-wdi-media-role="identity" width="244" height="340" />Hermes by Nous Research ↗</a></p>
+</main>
+</body>
+</html>
