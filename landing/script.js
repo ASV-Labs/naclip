@@ -33,7 +33,7 @@
     motionButton.setAttribute('aria-label', label);
     motionButton.title = label;
     motionButton.innerHTML = complete
-      ? '<span aria-hidden="true">↻</span><span>Replay animation</span>'
+      ? '<span>Replay animation</span>'
       : `<span aria-hidden="true">${paused || blocked ? '▷' : 'Ⅱ'}</span>`;
     motionButton.classList.toggle('replay', complete);
     document.body.dataset.motionState = complete ? 'complete' : paused ? 'paused' : blocked ? 'blocked' : ready ? 'playing' : 'intro';

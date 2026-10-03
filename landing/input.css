@@ -24,6 +24,7 @@ button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset:
 #hero1-card { bottom: 128px; }
 #hero1-card a { width: 44px; height: 44px; }
 #hero1-card a:focus-visible { outline-color: #2563eb; }
+#hero1-card .screenshots-link { display: inline-flex; align-items: center; width: auto; height: 44px; color: #245aa6; font-size: 12px; text-decoration: underline; text-underline-offset: 3px; }
 .salt-mark { width: 100%; height: 100%; background: #eaf1fa; display: grid; place-content: center; color: #24446e; font-size: 24px; line-height: 1.1; letter-spacing: -.05em; }
 .salt-mark span:nth-child(2) { padding-left: 22px; color: #5794e2; }
 #hero2-content { bottom: 130px; }

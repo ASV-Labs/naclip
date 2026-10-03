@@ -65,3 +65,7 @@ The supplied-template authorship verdict remains FAIL, independently of these fu
 ## Header alignment verification (2026-10-02)
 
 The five documentation labels now use flex centering within their existing 44px link boxes. Visually checked at 1440×1000 and 834×1112: labels align with the NaCLip wordmark and installation action. At 390×844 the desktop link group remains hidden and the mobile menu remains in place; horizontal overflow is zero. Typography, composition and authorship scores otherwise remain unchanged.
+
+## Decorative arrow removal verification (2026-10-02)
+
+Removed all diagonal link markers, install-action SVG arrows and the redundant replay glyph from published HTML/JavaScript. The screenshot shortcut is now a labeled text link. Inspected desktop 1440×1000, tablet 834×1112 and mobile 390×844: no decorative arrow text remains, no document horizontal overflow, and the compatibility tile has no internal overflow at tablet width. Desktop/mobile source links and install destinations are preserved; mobile disclosure still presents all links. Existing scores and the supplied-template authorship exception remain unchanged.

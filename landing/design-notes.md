@@ -45,7 +45,7 @@ Static product screenshots in visitor-facing content: none
 
 The supplied Hermes and Nous Research logos are identity media, linked to their owners. The decorative videos are supplied editorial atmosphere. Product test evidence is linked to the repository audit and gallery, not represented by those videos.
 
-Decorative background video layers are outside main and aria-hidden; main contains the actual proposition, source links, identity credits and controls. Navigation uses a Unicode arrow rather than a static vector illustration. This semantic separation keeps atmosphere distinct from product proof.
+Decorative background video layers are outside main and aria-hidden; main contains the actual proposition, source links, identity credits and controls. Navigation uses plain text links without decorative arrow marks. This semantic separation keeps atmosphere distinct from product proof.
 
 ## Distribution preview (2026-10-02 update, before asset/metadata implementation)
 
@@ -90,3 +90,7 @@ Verification plan: observe natural Skin → Setup → final-frame completion wit
 ## Navigation alignment correction (2026-10-02, before CSS change)
 
 The founder requested the five desktop documentation labels align vertically with the NaCLip wordmark. Their 44px link boxes had top-aligned inline text. Center the link contents with flex alignment, scoped to the navigation’s inner link group so mobile-hidden links and the install action retain their behavior. Preserve the composition, header position, sizing, motion and content. Check the text alignment at desktop/tablet and the unchanged mobile disclosure. This is a small typography correction within the existing page classification and gate.
+
+## Remove decorative arrows (2026-10-02, before code)
+
+The founder explicitly rejects decorative arrow marks. Remove them throughout the public landing page, including desktop/mobile proof links, footer credits, both install actions and the screenshot shortcut. Keep the underlying destinations and accessible link names. Replace the arrow-only screenshot shortcut with a plain “View screenshots” text link; remove the redundant replay glyph because its text already names the action. Use no replacement decorative icon. Preserve the cinematic sequence, layout system, navigation and credited identities. Check the full desktop page and mobile menu for remaining arrows and ensure the compatibility tile still fits at tablet width. Existing classification, provenance and supplied-template exception remain in force.
