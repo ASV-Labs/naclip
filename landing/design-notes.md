@@ -46,3 +46,31 @@ Static product screenshots in visitor-facing content: none
 The supplied Hermes and Nous Research logos are identity media, linked to their owners. The decorative videos are supplied editorial atmosphere. Product test evidence is linked to the repository audit and gallery, not represented by those videos.
 
 Decorative background video layers are outside main and aria-hidden; main contains the actual proposition, source links, identity credits and controls. Navigation uses a Unicode arrow rather than a static vector illustration. This semantic separation keeps atmosphere distinct from product proof.
+
+## Distribution preview (2026-10-02 update, before asset/metadata implementation)
+
+Route ID: naclip-home
+Canonical URL: https://asv-labs.github.io/naclip/
+Preview title: NaCLip · Make the desk yours
+Preview description: Themes, widget packs and appearance tools for Hermes Desktop. An independent open-source plugin by ASV Labs.
+Site/product name: NaCLip
+Preview image path: assets/naclip-social-7fbca8aafd26.jpg
+Preview image public absolute URL: https://asv-labs.github.io/naclip/assets/naclip-social-7fbca8aafd26.jpg (planned before implementation; deployment checked separately)
+Preview image alt text: NaCLip. Your skin for Hermes. Make the desk yours. Graphite, Ocean and Paper themes. Independent plugin by ASV Labs, with the credited Hermes Agent mark.
+Preview image provenance: none — owned type-led identity artwork; no product UI.
+Route-specific or host fallback: route-specific, one public landing canonical.
+Fallback justification, if any: NOT_APPLICABLE.
+Expected light behavior: one dark raster, high-contrast white text, blue accent, unchanged semantics.
+Expected dark behavior: same raster, visible keyline and padded edges.
+Large-card crop behavior: 1200×630, centered wordmark and purpose, important copy inside 630px-wide center.
+Compact-card crop behavior: central 630×630 square retains the name, Hermes purpose and ASV Labs attribution. Inspect an independently rendered square export.
+Build verification evidence: NOT_RUN.
+Preview-render inspection evidence: NOT_RUN.
+Deployed-route verification evidence: NOT_DEPLOYED.
+Platform cache-refresh state: NOT_REFRESHED.
+Actual platform-preview inspection evidence: NOT_RUN.
+Founder-acceptance state: NOT_ACCEPTED.
+
+Source/export harness: internal authoring HTML, not a public page. Large 1200×630 raster, 630×630 crop inspection, and separate 1080×1350 Instagram post / 1080×1920 Story artwork. Helvetica/Arial, existing dark/blue NaCLip palette, honest appearance-plugin wording. Supplied Hermes mark identifies compatibility; it does not imply official endorsement. No fake interface, particles, invented statistics or external photo dependencies. The source and export asset are local, and metadata is emitted in the initial HTML. Content-address the deployed image and validate crawler reads separately from any actual platform composer preview. No social post is authorized.
+
+Distribution preview implementation: type-led JPEG exported at 1200×630; large and 630×630 central crop inspected. Instagram post and Story artwork exported at 1080×1350 and 1080×1920. Build metadata and JPEG dimension/MIME/hash verification PASS. Initial-HTML Open Graph and explicit X summary_large_image fields are generated from social-preview.json. Crawler and actual-platform verification remain separate evidence; see docs/SOCIAL-SHARING.md for live state.

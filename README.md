@@ -11,7 +11,7 @@ A customizable Hermes Desktop plugin by **ASV Labs**.
 [![Checks](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml/badge.svg)](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[Website](https://asv-labs.github.io/naclip/) · [Install](#install-in-hermes-desktop) · [Screenshots](docs/SCREENSHOTS.md) · [Customization](docs/APPEARANCE.md) · [Verification](docs/RELEASE-AUDIT.md)
+[Website](https://asv-labs.github.io/naclip/) · [Install](#install-in-hermes-desktop) · [Screenshots](docs/SCREENSHOTS.md) · [Customization](docs/APPEARANCE.md) · [Sharing](docs/SOCIAL-SHARING.md) · [Verification](docs/RELEASE-AUDIT.md)
 
 </div>
 

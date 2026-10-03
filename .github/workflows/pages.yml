@@ -24,9 +24,10 @@ jobs:
       - name: Stage static website
         run: |
           node --check landing/script.js
+          python3 landing/scripts/social-preview.py
           mkdir -p _site/assets
           cp landing/index.html landing/styles.css landing/script.js _site/
-          cp landing/assets/hermes-agent.png landing/assets/nous-research.png _site/assets/
+          cp landing/assets/*.png landing/assets/*.jpg _site/assets/
           touch _site/.nojekyll
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:

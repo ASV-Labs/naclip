@@ -1,0 +1,26 @@
+{
+  "routeId": "naclip-home",
+  "canonicalUrl": "https://asv-labs.github.io/naclip/",
+  "siteName": "NaCLip",
+  "title": "NaCLip \u00b7 Make the desk yours",
+  "description": "Themes, widget packs and appearance tools for Hermes Desktop. An independent open-source plugin by ASV Labs.",
+  "imagePath": "assets/naclip-social-7fbca8aafd26.jpg",
+  "imageUrl": "https://asv-labs.github.io/naclip/assets/naclip-social-7fbca8aafd26.jpg",
+  "imageMime": "image/jpeg",
+  "imageWidth": 1200,
+  "imageHeight": 630,
+  "imageAlt": "NaCLip. Make the desk yours. Your skin for Hermes Desktop. Graphite, Ocean and Paper themes, with the Hermes Agent mark and ASV Labs attribution.",
+  "cardType": "summary_large_image",
+  "provenance": {
+    "kind": "none",
+    "ref": "Type-led artwork in landing/social/card.html; credited Hermes mark from user-supplied assets, see THIRD-PARTY-NOTICES.md",
+    "capturedAt": null
+  },
+  "asset": {
+    "sha256": "7fbca8aafd26202fab1bcda478e4f912bddfde706e94ed72cf83aaba6d9c3154",
+    "byteSize": 34095,
+    "exportedAt": "2026-10-03T02:33:59.589832+00:00",
+    "method": "Browser-rendered HTML artwork exported at 1200x630 via screenshot API",
+    "permissionRef": "THIRD-PARTY-NOTICES.md#landing-page-identity-and-media"
+  }
+}

@@ -28,3 +28,18 @@ Navigation links point directly to the repository and source documents. The two 
 The original external decorative videos remain hosted at their supplied URLs. Text and navigation work if those assets are unavailable. Logos and their owner credits are documented in [third-party notices](../THIRD-PARTY-NOTICES.md).
 
 [Design note](design-notes.md) · [Visual review](wdi-011-score-sheet.md)
+
+## Social cards
+
+`social-preview.json` records the canonical URL, share copy, image dimensions, provenance and hash. Re-render the bounded metadata block and validate without executing website JavaScript:
+
+```sh
+python3 landing/scripts/social-preview.py --render
+python3 landing/scripts/social-preview.py --deployed --output .local-test/social-preview-live.json
+```
+
+The commands run from the repository root. CI validates the emitted metadata and image bytes. Deployed checks read the canonical as a normal client, Twitterbot and Meta crawler user agents, then fetch the exact versioned image. They do not publish posts or prove a platform's cached composer preview.
+
+Authoring source: `social/card.html`. Serve landing/ locally and export at a 1200×630 viewport for the link card. For portrait exports, use a 1080×1000 viewport with `?format=post` or `?format=story`, then a full-page screenshot for the exact 1080×1350 / 1080×1920 canvas. These files are authoring inputs and are not uploaded as site routes.
+
+[Sharing guide and Instagram artwork](../docs/SOCIAL-SHARING.md).
