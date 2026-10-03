@@ -1,5 +1,7 @@
 # NaCLip for Hermes Desktop
 
+[![Checks](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml/badge.svg)](https://github.com/ASV-Labs/naclip/actions/workflows/checks.yml)
+
 A customizable skin for working alongside your Hermes agent: Sessions and Bots, instance/profile access, a composer model picker, light/dark controls, and an agent-computer pane.
 
 **Status: development preview and experimental desktop plugin.** The browser preview is working with simulated services. The native plugin has passed a scoped macOS integration smoke test, including a real Grok 4.7 reply. Full native parity and Docker screen acceptance remain pending. This repository does not ship a standalone Hermes application or a preconfigured virtual machine.

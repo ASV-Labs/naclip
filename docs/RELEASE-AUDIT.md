@@ -41,7 +41,7 @@ Initial pane adoption left workspace panes overlapping. Hermes’s **Reset layou
 
 ## Local checks and release boundary
 
-Seven preview tests, five launcher tests, routing checks, appearance validation and production build passed. The dependency audit reported zero vulnerabilities at the audit date. Preview interactions were inspected at desktop, tablet and mobile widths; no horizontal document overflow was observed in earlier complete viewport checks. Native changes were inspected in the actual macOS window.
+Seven preview tests, five launcher tests, routing checks, appearance validation and production build passed. The dependency audit reported zero vulnerabilities at the audit date. A clean local checkout reproduced the checks, and [the first public GitHub Actions run](https://github.com/ASV-Labs/naclip/actions/runs/37084298876) passed on Ubuntu with Node 24. An unauthenticated public clone contained the exact root plugin entry and excluded test/auth directories; the native Git-install dialog itself remains untested. Preview interactions were inspected at desktop, tablet and mobile widths; no horizontal document overflow was observed in earlier complete viewport checks. Native changes were inspected in the actual macOS window.
 
 The redesigned capability explorer and extra Tools filters are still browser-only; native Hermes retains its own capability pages. The skin’s native search improvement is cosmetic. Mobile browser support is not a packaged mobile client.
 
