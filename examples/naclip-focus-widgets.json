@@ -1,0 +1,107 @@
+{
+  "format": "naclip/appearance@1",
+  "name": "Ocean Focus",
+  "palette": {
+    "light": {
+      "background": "#F1F7F8",
+      "sidebar": "#E3EFF0",
+      "surface": "#FFFFFF",
+      "text": "#142E36",
+      "secondary": "#4D6870",
+      "border": "#CBDDE0",
+      "accent": "#087E8B"
+    },
+    "dark": {
+      "background": "#10232B",
+      "sidebar": "#0B1B22",
+      "surface": "#19313B",
+      "text": "#E4F3F5",
+      "secondary": "#9FC2CB",
+      "border": "#304D58",
+      "accent": "#39B4C1"
+    }
+  },
+  "widgetStyle": "outline",
+  "widgetShape": "rounded",
+  "widgets": [
+    {
+      "id": "new",
+      "label": "New chat",
+      "icon": "Plus",
+      "color": "#4264E8",
+      "visible": true
+    },
+    {
+      "id": "bots",
+      "label": "Bots",
+      "icon": "Bot",
+      "color": "#159DC6",
+      "visible": true
+    },
+    {
+      "id": "profiles",
+      "label": "Instances and profiles",
+      "icon": "Users",
+      "color": "#34C989",
+      "visible": true
+    },
+    {
+      "id": "computer",
+      "label": "Agent’s computer",
+      "icon": "Monitor",
+      "color": "#D78925",
+      "visible": true
+    },
+    {
+      "id": "capabilities",
+      "label": "Capabilities",
+      "icon": "Plug",
+      "color": "#762CE0",
+      "visible": false
+    },
+    {
+      "id": "messaging",
+      "label": "Messaging",
+      "icon": "MessageCircle",
+      "color": "#2876CC",
+      "visible": false
+    },
+    {
+      "id": "artifacts",
+      "label": "Artifacts",
+      "icon": "Package",
+      "color": "#D33274",
+      "visible": false
+    },
+    {
+      "id": "cron",
+      "label": "Automations",
+      "icon": "Clock",
+      "color": "#CD4936",
+      "visible": false
+    },
+    {
+      "id": "command",
+      "label": "Command center",
+      "icon": "LayoutDashboard",
+      "color": "#28B6AE",
+      "visible": false
+    },
+    {
+      "id": "settings",
+      "label": "Settings",
+      "icon": "Settings",
+      "color": "#BDA23D",
+      "visible": true
+    },
+    {
+      "id": "custom-daily-brief",
+      "label": "Daily brief",
+      "icon": "Briefcase",
+      "color": "#087E8B",
+      "visible": true,
+      "kind": "prompt",
+      "value": "Help me choose my three priorities today and make a practical plan."
+    }
+  ]
+}

@@ -1,0 +1,652 @@
+[
+  {
+    "id": "airtable",
+    "name": "Airtable",
+    "description": "Bases, tables, and records from your Airtable workspace.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "algolia",
+    "name": "Algolia",
+    "description": "Algolia search: indices, analytics, and settings (read-only).",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "alltrails",
+    "name": "AllTrails",
+    "description": "AllTrails: find hikes and trails with reviews and ratings.",
+    "category": "Lifestyle",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "amplitude",
+    "name": "Amplitude",
+    "description": "Amplitude analytics: charts, dashboards, experiments, flags.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "asana",
+    "name": "Asana",
+    "description": "Tasks, projects, and goals from your Asana workspace.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "atlassian",
+    "name": "Atlassian",
+    "description": "Jira issues and Confluence pages via Atlassian's hosted remote MCP.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "attio",
+    "name": "Attio",
+    "description": "CRM records, lists, and notes in Attio.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "aws-knowledge",
+    "name": "AWS Knowledge",
+    "description": "Authoritative AWS docs, API references, and best practices.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "betterstack",
+    "name": "Better Stack",
+    "description": "Better Stack: logs, uptime monitors, incidents, and status pages.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "buildkite",
+    "name": "Buildkite",
+    "description": "CI/CD pipelines, builds, and test results from Buildkite.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "calendly",
+    "name": "Calendly",
+    "description": "Scheduling links, events, and invitees from Calendly.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "canva",
+    "name": "Canva",
+    "description": "Create, search, and manage Canva designs.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "circleci",
+    "name": "CircleCI",
+    "description": "CircleCI: diagnose build failures, read logs, rerun workflows.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "clickup",
+    "name": "ClickUp",
+    "description": "Tasks, docs, and workspaces in ClickUp.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "close",
+    "name": "Close",
+    "description": "Sales CRM: leads, opportunities, calls, and emails.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "cloudflare",
+    "name": "Cloudflare",
+    "description": "Full Cloudflare API access via the official remote MCP.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "cloudinary",
+    "name": "Cloudinary",
+    "description": "Upload, search, and transform media assets in Cloudinary.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "comfy-cloud",
+    "name": "Comfy Cloud",
+    "description": "Generate images, video, audio, and 3D on Comfy Cloud.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "context7",
+    "name": "Context7",
+    "description": "Up-to-date, version-specific library docs and code examples.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "craft",
+    "name": "Craft",
+    "description": "Craft: structured docs, tasks, and personal knowledge base.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "datadog",
+    "name": "Datadog",
+    "description": "Logs, monitors, dashboards, and incidents from Datadog.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "deepwiki",
+    "name": "DeepWiki",
+    "description": "Ask questions about any public GitHub repo (Devin's DeepWiki).",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "dropbox",
+    "name": "Dropbox",
+    "description": "Search, read, and manage files in Dropbox.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "figma",
+    "name": "Figma",
+    "description": "Official Figma remote MCP \u2014 design context, Code Connect, and write-to-canvas via https://mcp.figma.com/mcp (OAuth).",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "fireflies",
+    "name": "Fireflies",
+    "description": "Meeting transcripts, summaries, and action items.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "gamma",
+    "name": "Gamma",
+    "description": "Gamma: generate and edit AI presentations, docs, and sites.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "gitlab",
+    "name": "GitLab",
+    "description": "GitLab: issues, merge requests, pipelines, and repo context.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "globalping",
+    "name": "Globalping",
+    "description": "Ping, traceroute, DNS, and HTTP tests from global probes.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "grafana",
+    "name": "Grafana",
+    "description": "Query metrics, logs, dashboards, alerts, and incidents from Grafana Cloud.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "hugging_face",
+    "name": "Hugging Face",
+    "description": "Models, datasets, Spaces, and papers from the Hugging Face Hub.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "indeed",
+    "name": "Indeed",
+    "description": "Search jobs and listings on Indeed.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "intercom",
+    "name": "Intercom",
+    "description": "Conversations, tickets, and customer data from Intercom.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "kiwi",
+    "name": "Kiwi",
+    "description": "Kiwi.com flight search: itineraries with direct booking links.",
+    "category": "Lifestyle",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "klaviyo",
+    "name": "Klaviyo",
+    "description": "Klaviyo marketing: campaigns, flows, segments, and reporting.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "linear",
+    "name": "Linear",
+    "description": "Find, create, and update Linear issues, projects, and comments.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "microsoft-learn",
+    "name": "Microsoft Learn",
+    "description": "Official Microsoft, Azure, and .NET docs and code samples.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "miro",
+    "name": "Miro",
+    "description": "Read and edit Miro boards, diagrams, and frames.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "mixpanel",
+    "name": "Mixpanel",
+    "description": "Mixpanel analytics: events, funnels, retention, dashboards.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "monday",
+    "name": "Monday",
+    "description": "Boards, items, docs, and workflows in monday.com.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "motherduck",
+    "name": "MotherDuck",
+    "description": "MotherDuck: query DuckDB cloud warehouses with SQL.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "n8n-official",
+    "name": "n8n",
+    "description": "Connect to your n8n instance's official MCP server with browser OAuth.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "neon",
+    "name": "Neon",
+    "description": "Neon serverless Postgres: projects, branches, and SQL.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "netlify",
+    "name": "Netlify",
+    "description": "Sites, deploys, and env vars via Netlify's hosted MCP.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "notion",
+    "name": "Notion",
+    "description": "Pages and databases from your Notion workspace.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "paypal",
+    "name": "PayPal",
+    "description": "Payments, invoices, and subscriptions via PayPal's hosted MCP.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "plaid",
+    "name": "Plaid",
+    "description": "Plaid dashboard: integrations, Items, and usage debugging.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "postman",
+    "name": "Postman",
+    "description": "Postman workspaces, collections, environments, and APIs.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "prisma-postgres",
+    "name": "Prisma Postgres",
+    "description": "Create and manage Prisma Postgres databases.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "railway",
+    "name": "Railway",
+    "description": "Railway: projects, services, deployments, and environments.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "robinhood",
+    "name": "Robinhood",
+    "description": "Robinhood agentic trading: portfolio, balances, and orders.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "semgrep",
+    "name": "Semgrep",
+    "description": "Scan code for security vulnerabilities with Semgrep.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "sentry",
+    "name": "Sentry",
+    "description": "Issues, stack traces, and error context from Sentry.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "square",
+    "name": "Square",
+    "description": "Catalog, orders, and payments via Square's hosted MCP.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "strava",
+    "name": "Strava",
+    "description": "Strava: activities, fitness trends, training load (read-only).",
+    "category": "Lifestyle",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "stripe",
+    "name": "Stripe",
+    "description": "Payments, customers, and invoices via Stripe's hosted MCP.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "supabase",
+    "name": "Supabase",
+    "description": "Database, auth, and storage from your Supabase projects.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "todoist",
+    "name": "Todoist",
+    "description": "Manage Todoist tasks and projects.",
+    "category": "Productivity",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "trivago",
+    "name": "Trivago",
+    "description": "trivago hotel search: compare prices by city and dates.",
+    "category": "Lifestyle",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "twelve-data",
+    "name": "Twelve Data",
+    "description": "Stocks, forex, and crypto market data from Twelve Data.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "twilio-docs",
+    "name": "Twilio Docs",
+    "description": "Twilio developer docs search (public beta, read-only).",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "unreal-engine",
+    "name": "Unreal Engine",
+    "description": "Drive the Unreal Engine 5.8 editor over its local MCP server.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "vercel",
+    "name": "Vercel",
+    "description": "Deployments, logs, and projects via Vercel's hosted MCP.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "webflow",
+    "name": "Webflow",
+    "description": "Sites, CMS collections, and pages via Webflow's hosted MCP.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "wolfram",
+    "name": "Wolfram",
+    "description": "Wolfram|Alpha computation, math, and curated knowledge.",
+    "category": "Data & finance",
+    "source": "Hermes catalog",
+    "auth": "none",
+    "transport": "http",
+    "enabled": false
+  },
+  {
+    "id": "wordpress-com",
+    "name": "WordPress.com",
+    "description": "WordPress.com: posts, pages, drafts, stats, and comments.",
+    "category": "Development",
+    "source": "Hermes catalog",
+    "auth": "oauth",
+    "transport": "http",
+    "enabled": false
+  }
+]

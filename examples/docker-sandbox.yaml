@@ -1,0 +1,6 @@
+# Merge into the selected TEST profile's config.yaml; do not replace other settings.
+terminal:
+  backend: docker
+  docker_image: nousresearch/hermes-sandbox:desktop
+bot_desktop:
+  placement: auto

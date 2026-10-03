@@ -1,0 +1,18 @@
+{
+  "name": "naclip-local-preview",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 14327 --strictPort",
+    "build": "vite build",
+    "test": "node --test session-state.test.mjs hermes-catalog.test.mjs"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.468.0",
+    "vite": "^7.0.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0"
+  }
+}
