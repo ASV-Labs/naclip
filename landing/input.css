@@ -9,6 +9,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 a, button { touch-action: manipulation; }
 button:focus-visible, a:focus-visible { outline: 2px solid #fff; outline-offset: 5px; }
 #navbar-wrapper nav a, #mobile-menu-btn { min-height: 44px; }
+#navbar-wrapper nav > div a { display: flex; align-items: center; }
 #mobile-menu-btn { min-width: 44px; }
 #mobile-overlay { overflow: auto; padding: 100px 24px 70px; }
 #mobile-overlay a { min-height: 44px; display: flex; align-items: center; }

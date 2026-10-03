@@ -61,3 +61,7 @@ The founder requested automatic, finite motion. This replaces manual scene progr
 - Background-tab suspension is implemented and source-inspected; this browser did not expose a hidden-tab state during the local checks. Normal playback, pause, replay and menu suspension were exercised.
 
 The supplied-template authorship verdict remains FAIL, independently of these functional checks. Public deployment and its automatic sequence are verified after publishing; the static verifier receipt stays separate from browser proof.
+
+## Header alignment verification (2026-10-02)
+
+The five documentation labels now use flex centering within their existing 44px link boxes. Visually checked at 1440×1000 and 834×1112: labels align with the NaCLip wordmark and installation action. At 390×844 the desktop link group remains hidden and the mobile menu remains in place; horizontal overflow is zero. Typography, composition and authorship scores otherwise remain unchanged.
