@@ -1,0 +1,13 @@
+{
+  "version": "0.4.2",
+  "released": "2026-10-05",
+  "notes": [
+    "Swap sidebar sides now works every time, not just once.",
+    "The widget rail and shortcut dock stay fixed; their seams no longer drag across the window.",
+    "Resize lines start below the titlebar and stay clear of the window controls.",
+    "Tabs no longer slide under the traffic lights after swapping sides.",
+    "The expanded widget sidebar, tooltips and glass backdrop follow the sidebar to the right.",
+    "NaCLip now tells you when an update is available."
+  ],
+  "url": "https://github.com/ASV-Labs/naclip/releases/tag/v0.4.2"
+}

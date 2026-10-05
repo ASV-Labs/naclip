@@ -52,6 +52,14 @@ The root [`plugin.js`](plugin.js) is the installable entry. **No npm build or Do
 
 Prefer testing away from your daily agent first? Follow [the isolated native test guide](docs/NATIVE-TEST.md). A separate app copy, Hermes home, backend, auth store and workspace protect the test boundary; changing only Electron’s user-data directory is insufficient.
 
+### Updating
+
+NaCLip checks GitHub for a newer version about twice a day and shows an **Update** notification in Hermes when one is published. The check is one request for this repository's [`version.json`](version.json), sent without cookies or a referrer. You can turn it off, or check by hand, at the top of **NaCLip appearance** or with **NaCLip: Check for updates** in the command palette.
+
+To update, choose **Update**. NaCLip copies the repository link and opens **Capabilities → Plugins**. Choose **Install from Git**, paste the link, and install; Hermes replaces NaCLip in place. If you installed by copying `plugin.js` by hand, replace that file with the new [`plugin.js`](plugin.js). Your theme, widgets and shortcuts are kept either way.
+
+**0.4.2** fixes **Swap sidebar sides** working only once, the widget rail and shortcut dock seams stretching across the window, resize lines crossing the window controls, tabs sliding under the traffic lights after a swap, and the glass backdrop, expanded widget sidebar and tooltips staying on the wrong side.
+
 ### Setup and recovery
 
 - **Missing or overlapping panes:** save your preferred arrangement, then use **Reset layout** in Hermes’s command palette. This resets pane placement.
@@ -119,6 +127,7 @@ cd ..
 node tandem/scripts/check-routing.mjs
 node tandem/scripts/check-appearance.mjs
 node tandem/scripts/check-workspaces.mjs
+node tandem/scripts/check-layout.mjs
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/test-launcher.py
 ```
 

@@ -11,7 +11,7 @@ import { jsx, jsxs, Fragment } from 'react/jsx-runtime'
 const { host, cn, icons, useValue, atom, Button, Input } = sdk
 
 const ID = 'tandem'
-const VERSION = '0.4.1'
+const VERSION = '0.4.2'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Theme
@@ -170,6 +170,27 @@ export function appearancePrompt(description,pack=DEFAULT_APPEARANCE) {
 }
 // --- appearance:end ---
 
+// --- update:begin ---
+export const REPO_URL = 'https://github.com/ASV-Labs/naclip'
+export const UPDATE_MANIFEST_URL = 'https://raw.githubusercontent.com/ASV-Labs/naclip/main/version.json'
+export const PLUGIN_RAW_URL = 'https://raw.githubusercontent.com/ASV-Labs/naclip/main/plugin.js'
+/** Numeric x.y.z comparison: >0 when a is newer than b. */
+export function compareVersions(a,b) {
+ const pa=String(a).split('.').map(n=>parseInt(n,10)||0),pb=String(b).split('.').map(n=>parseInt(n,10)||0)
+ for(let i=0;i<3;i++){const d=(pa[i]||0)-(pb[i]||0);if(d)return d>0?1:-1}
+ return 0
+}
+/** version.json is untrusted network data: keep only a strict version, short plain-text notes and a repo-owned link. */
+export function parseVersionManifest(input) {
+ if(!input||typeof input!=='object'||Array.isArray(input))throw new Error('Version manifest must be an object.')
+ const version=String(input.version||'')
+ if(!/^\d{1,4}\.\d{1,4}\.\d{1,4}$/.test(version))throw new Error('Version manifest has no valid version.')
+ const notes=(Array.isArray(input.notes)?input.notes:[]).filter(n=>typeof n==='string'&&n.trim()).map(n=>n.trim().slice(0,200)).slice(0,6)
+ const url=typeof input.url==='string'&&/^https:\/\/github\.com\/ASV-Labs\/naclip(\/[\w./#?=-]*)?$/.test(input.url)?input.url:REPO_URL+'/releases'
+ return {version,notes,url}
+}
+// --- update:end ---
+
 export const $appearance = atom(DEFAULT_APPEARANCE)
 export const $railExpanded = atom(false)
 let disposeCustomTheme=()=>{}
@@ -208,6 +229,10 @@ const $computerWorkspaceOpen = atom(false)
 const $viewer = atom(null) // { profile, viewerId, hash } | null
 const $chips = atom([])
 const $navTidy = atom(false)
+// Which window edge the widget rail sits on ('right' after Swap sidebar sides).
+const $railSide = atom('left')
+// Newer NaCLip release found by the update check: {version, notes, url} | null.
+const $update = atom(null)
 
 const DEFAULT_CHIPS = [
   { id: 'c1', label: 'Status report', kind: 'prompt', value: 'Give me a two-line status report on what you are working on right now.' },
@@ -1027,13 +1052,15 @@ function runWidget(item) {
  else if(item.kind==='link')pluginCtx&&pluginCtx.os.openExternal(item.value)
  else if(item.run)item.run()
 }
-function RailTile({item,index,active,expanded=false}) {
- const pack=useValue($appearance),color=item.color||tileColor(item.id,index)
- const tile=jsxs('button',{type:'button','aria-label':item.label,'aria-current':active?'page':undefined,onClick:()=>runWidget(item),className:cn('skin-rail-item',expanded&&'with-label',active&&'is-active'),style:{'--tile':color,'--tile-ink':readableInk(/^#[0-9a-f]{6}$/i.test(color)?color:'#3366FF')},children:[jsx('span',{className:'tandem-tile',children:jsx(Icon,{name:item.icon,className:'size-[18px]'})}),expanded?jsx('span',{className:'skin-widget-label',children:item.label}):null]})
- return !expanded&&sdk.Tip?jsx(sdk.Tip,{label:item.label,side:'right',children:tile}):tile
+function RailTile({item,index,active,expanded=false,badge=false}) {
+ const pack=useValue($appearance),side=useValue($railSide),color=item.color||tileColor(item.id,index)
+ const label=badge?item.label+' (update available)':item.label
+ const tile=jsxs('button',{type:'button','aria-label':label,'aria-current':active?'page':undefined,onClick:()=>runWidget(item),className:cn('skin-rail-item',expanded&&'with-label',active&&'is-active'),style:{'--tile':color,'--tile-ink':readableInk(/^#[0-9a-f]{6}$/i.test(color)?color:'#3366FF')},children:[jsxs('span',{className:'tandem-tile',children:[jsx(Icon,{name:item.icon,className:'size-[18px]'}),badge?jsx('span',{className:'skin-update-dot','aria-hidden':true}):null]}),expanded?jsx('span',{className:'skin-widget-label',children:label}):null]})
+ // Tooltips open toward the window, not off its edge, when the rail is swapped right.
+ return !expanded&&sdk.Tip?jsx(sdk.Tip,{label,side:side==='right'?'left':'right',children:tile}):tile
 }
 function Rail() {
- const route=useHashRoute(),pack=useValue($appearance),expanded=useValue($railExpanded),popup=useRef(null),rail=useRef(null)
+ const route=useHashRoute(),pack=useValue($appearance),expanded=useValue($railExpanded),update=useValue($update),popup=useRef(null),rail=useRef(null)
  const botsActive=typeof host.paneVisibility==='function'?useValue(host.paneVisibility('hermes-bots:pane')):false
  const toggle=value=>{$railExpanded.set(value);pluginCtx&&pluginCtx.storage.set('railExpanded',value)}
  const widgets=pack.widgets.filter(w=>w.visible&&w.id!=='settings').map(w=>({...RAIL.find(r=>r.id===w.id),...w,...(w.kind==='route'?{route:w.value}:{})}))
@@ -1041,10 +1068,11 @@ function Rail() {
  useEffect(()=>{
   const el=popup.current
   if(expanded){
-   const position=()=>{const rect=rail.current.getBoundingClientRect();el.style.top=rect.top+'px';el.style.left=rect.left+'px';el.style.height=Math.max(0,innerHeight-rect.top)+'px'}
-   position();el.showPopover();window.addEventListener('resize',position)
+   // Anchor to whichever edge the rail is on so the panel opens into the window.
+   const position=()=>{if(!rail.current)return;const rect=rail.current.getBoundingClientRect(),right=rect.left+rect.width/2>innerWidth/2;el.dataset.side=right?'right':'left';el.style.top=rect.top+'px';el.style.left=right?'auto':rect.left+'px';el.style.right=right?Math.max(0,innerWidth-rect.right)+'px':'auto';el.style.height=Math.max(0,innerHeight-rect.top)+'px'}
+   position();el.showPopover();window.addEventListener('resize',position);window.addEventListener(LAYOUT_EVENT,position)
    const observer=new ResizeObserver(position);observer.observe(rail.current)
-   return()=>{window.removeEventListener('resize',position);observer.disconnect()}
+   return()=>{window.removeEventListener('resize',position);window.removeEventListener(LAYOUT_EVENT,position);observer.disconnect()}
   }
   else if(el.matches(':popover-open')){const restore=el.contains(document.activeElement);el.hidePopover();if(restore)rail.current.querySelector('button').focus()}
  },[expanded])
@@ -1052,7 +1080,7 @@ function Rail() {
   jsx('button',{type:'button',className:'skin-rail-expand','aria-label':wide?'Collapse widget sidebar':'Expand widget sidebar','aria-expanded':expanded,'aria-controls':'naclip-expanded-widgets',onClick:()=>toggle(!expanded),children:wide?'‹  Collapse sidebar':'›'},'expand'),
   jsx('div',{className:'skin-widget-list',children:widgets.map((item,i)=>jsx(RailTile,{item,index:i,expanded:wide,active:item.id==='bots'?botsActive:!!item.route&&(item.route==='/'?route==='/':route.startsWith(item.route))},item.id))},'widgets'),
   element('div',{key:'settings-group',className:'skin-rail-settings'},[
-   jsx(RailTile,{item:{id:'appearance',label:'Customize appearance',icon:'Palette',color:'#638D87',run:openAppearance},index:10,expanded:wide},'appearance'),
+   jsx(RailTile,{item:{id:'appearance',label:'Customize appearance',icon:'Palette',color:'#638D87',run:openAppearance},index:10,expanded:wide,badge:!!update},'appearance'),
    jsx(RailTile,{item:settings,index:9,expanded:wide,active:route.startsWith('/settings')},'settings')
   ])
  ]
@@ -1173,6 +1201,267 @@ function Dock() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Layout guard
+//
+// Hermes measures each zone's titlebar reservation (traffic lights on the
+// left, the tool cluster on the right) only when a zone RESIZES. Swap sidebar
+// sides moves zones without resizing them, so the old reservations stay: the
+// sessions header's window-drag strip lands on top of the swap/settings
+// buttons (macOS turns those clicks into a window drag — "swap works once")
+// and the chat tabs slide under the traffic lights. Whenever zone positions
+// change we ask Hermes to re-measure with its own chrome-changed event.
+//
+// The same pass keeps NaCLip's fixed strips fixed: the widget rail and the
+// shortcut dock lose their resize seams, other seams start below the
+// titlebar so their hover line never crosses the window controls, and the
+// glass backdrop follows the sidebar to whichever side it is on.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const TITLEBAR_CHROME_EVENT = 'hermes:titlebar-chrome-changed'
+const LAYOUT_EVENT = 'naclip:layout-changed'
+const TITLEBAR_BAND_PX = 34
+
+// --- layout-guard:begin ---
+const zoneOf = selector => {
+  const el = document.querySelector(selector)
+  return el ? el.closest('[data-tree-group]') : null
+}
+const shownRect = el => {
+  if (!el) return null
+  const r = el.getBoundingClientRect()
+  return r.width > 0 && r.height > 0 ? r : null
+}
+const setData = (el, key, value) => {
+  if (value == null) { if (key in el.dataset) delete el.dataset[key] }
+  else if (el.dataset[key] !== value) el.dataset[key] = value
+}
+
+function layoutSignature() {
+  let sig = String(window.innerWidth)
+  for (const g of document.querySelectorAll('[data-tree-group]')) {
+    const r = g.getBoundingClientRect()
+    if (r.width && r.height) sig += `|${g.getAttribute('data-tree-group')}:${Math.round(r.left)},${Math.round(r.top)},${Math.round(r.width)},${Math.round(r.height)}`
+  }
+  return sig
+}
+
+function syncSashes(lockedWrappers) {
+  for (const sash of document.querySelectorAll('[data-tree-split] > div > [role="separator"]')) {
+    const wrapper = sash.parentElement
+    // The sash belongs to the seam between this track and its nearest SHOWN previous sibling.
+    let partner = wrapper.previousElementSibling
+    while (partner && partner.style.display === 'none') partner = partner.previousElementSibling
+    if (lockedWrappers.has(wrapper) || (partner && lockedWrappers.has(partner))) {
+      setData(sash, 'naclipSash', 'locked')
+    } else {
+      const vertical = sash.classList.contains('cursor-col-resize')
+      // Measure the TRACK, not the sash: the sash's own top moves once we inset it.
+      setData(sash, 'naclipSash', vertical && wrapper.getBoundingClientRect().top < 4 ? 'below-titlebar' : null)
+    }
+  }
+}
+
+function syncSidebarSide(rail, sessions) {
+  const root = document.documentElement
+  const mid = window.innerWidth / 2
+  const sideOf = r => (r.left + r.width / 2 > mid ? 'right' : 'left')
+  const railSide = rail ? sideOf(rail) : 'left'
+  if ($railSide.get() !== railSide) $railSide.set(railSide)
+  if (!sessions) {
+    setData(root, 'naclipSidebarSide', null)
+    root.style.removeProperty('--naclip-glass-edge')
+    return
+  }
+  const side = sideOf(sessions)
+  const group = [sessions, rail].filter(r => r && sideOf(r) === side)
+  const edge = side === 'right' ? window.innerWidth - Math.min(...group.map(r => r.left)) : Math.max(...group.map(r => r.right))
+  setData(root, 'naclipSidebarSide', side)
+  root.style.setProperty('--naclip-glass-edge', `${Math.max(0, Math.round(edge))}px`)
+}
+
+// --- layout-guard:end ---
+
+function startLayoutGuard(ctx) {
+  if (sdk.IS_PREVIEW || typeof MutationObserver === 'undefined') return () => {}
+  let lastSig = ''
+  let pending = 0
+  let frame = 0
+  let observedZones = []
+  const resizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(() => schedule()) : null
+
+  const run = () => {
+    pending = 0
+    const railZone = zoneOf('.skin-collapsed-rail')
+    const dockZone = zoneOf('.tandem-dock')
+    const sessionsZone = zoneOf('[data-tree-tab="sessions"]') || zoneOf('[data-slot="sidebar"]')
+    const locked = new Set([railZone, dockZone].filter(Boolean).map(z => z.parentElement))
+    syncSashes(locked)
+    syncSidebarSide(shownRect(railZone), shownRect(sessionsZone))
+    const zones = [railZone, dockZone, sessionsZone].filter(Boolean)
+    if (resizeObserver && (zones.length !== observedZones.length || zones.some((z, i) => z !== observedZones[i]))) {
+      resizeObserver.disconnect()
+      zones.forEach(z => resizeObserver.observe(z))
+      observedZones = zones
+    }
+    const sig = layoutSignature()
+    if (sig !== lastSig) {
+      const first = !lastSig
+      lastSig = sig
+      if (!first) {
+        // Hermes re-measures every zone's titlebar reservation on this event.
+        window.dispatchEvent(new CustomEvent(TITLEBAR_CHROME_EVENT))
+        window.dispatchEvent(new Event(LAYOUT_EVENT))
+      }
+    }
+  }
+  function schedule() {
+    if (pending) return
+    // Let the flip/drop commit and paint, then measure once.
+    pending = window.setTimeout(() => { frame = requestAnimationFrame(run) }, 80)
+  }
+
+  const mutations = new MutationObserver(records => {
+    for (const r of records) {
+      const t = r.target
+      // Chat streaming and pane content churn live inside zone bodies; ignore them.
+      if (t.nodeType === 1 && !t.closest('[data-zone-body]')) { schedule(); return }
+    }
+  })
+  mutations.observe(document.body, { childList: true, subtree: true })
+  const listen = (target, type, fn, opts) => {
+    if (ctx && typeof ctx.addEventListener === 'function') return ctx.addEventListener(target, type, fn, opts)
+    target.addEventListener(type, fn, opts)
+    return () => target.removeEventListener(type, fn, opts)
+  }
+  const offs = [listen(window, 'pointerup', schedule, true), listen(window, 'keyup', schedule, true), listen(window, 'resize', schedule)]
+  schedule()
+
+  return () => {
+    mutations.disconnect()
+    resizeObserver && resizeObserver.disconnect()
+    offs.forEach(off => off())
+    clearTimeout(pending)
+    cancelAnimationFrame(frame)
+    const root = document.documentElement
+    setData(root, 'naclipSidebarSide', null)
+    root.style.removeProperty('--naclip-glass-edge')
+    document.querySelectorAll('[data-naclip-sash]').forEach(el => setData(el, 'naclipSash', null))
+    // Hand the reservations back to Hermes's own measurements.
+    window.dispatchEvent(new CustomEvent(TITLEBAR_CHROME_EVENT))
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Update check
+//
+// Reads a tiny version.json from the NaCLip repo (no cookies, no referrer,
+// nothing sent but the request itself) and offers the update. Updating stays
+// the user's action: Hermes's own Install from Git replaces the plugin in
+// place and keeps saved settings. Turn checks off in NaCLip appearance.
+// ─────────────────────────────────────────────────────────────────────────────
+
+const UPDATE_FIRST_CHECK_MS = 15_000
+const UPDATE_INTERVAL_MS = 12 * 60 * 60 * 1000
+const UPDATE_SNOOZE_MS = 3 * 24 * 60 * 60 * 1000
+
+async function checkForUpdate({ manual = false } = {}) {
+  if (sdk.IS_PREVIEW || !pluginCtx || typeof fetch !== 'function') return null
+  if (!manual && pluginCtx.storage.get('updateChecks', true) === false) return null
+  const controller = typeof AbortController === 'function' ? new AbortController() : null
+  const timer = setTimeout(() => controller && controller.abort(), 10_000)
+  try {
+    const res = await fetch(`${UPDATE_MANIFEST_URL}?t=${Date.now()}`, { cache: 'no-store', credentials: 'omit', referrerPolicy: 'no-referrer', signal: controller ? controller.signal : undefined })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const text = await res.text()
+    if (text.length > 8000) throw new Error('Version manifest too large.')
+    const info = parseVersionManifest(JSON.parse(text))
+    if (!pluginCtx) return null
+    pluginCtx.storage.set('updateCheckedAt', Date.now())
+    if (compareVersions(info.version, VERSION) <= 0) {
+      $update.set(null)
+      if (manual) host.notify({ kind: 'success', message: `NaCLip ${VERSION} is up to date.` })
+      return null
+    }
+    $update.set(info)
+    const snooze = pluginCtx.storage.get('updateSnooze', null)
+    const snoozed = snooze && snooze.version === info.version && snooze.until > Date.now()
+    if (manual || !snoozed) promptUpdate(info)
+    return info
+  } catch {
+    if (manual) host.notify({ kind: 'warning', message: 'Could not reach GitHub to check for NaCLip updates. Try again later.' })
+    return null
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+function promptUpdate(info) {
+  host.notify({
+    id: 'naclip-update',
+    kind: 'info',
+    title: `NaCLip ${info.version} is available`,
+    message: info.notes[0] || 'A new version of your Hermes skin is ready.',
+    detail: `You have ${VERSION}. Your theme, widgets and shortcuts are kept.`,
+    durationMs: 0,
+    placement: 'default',
+    action: { label: 'Update', onClick: () => startUpdate(info) },
+    secondaryAction: {
+      label: 'Later',
+      onClick: () => pluginCtx && pluginCtx.storage.set('updateSnooze', { version: info.version, until: Date.now() + UPDATE_SNOOZE_MS })
+    }
+  })
+}
+
+async function startUpdate(info) {
+  const copied = pluginCtx ? await pluginCtx.os.writeClipboard(REPO_URL) : false
+  host.navigate('/capabilities?tab=plugins')
+  host.notify({
+    id: 'naclip-update-steps',
+    kind: 'info',
+    title: `Update NaCLip to ${info ? info.version : 'the latest version'}`,
+    message: copied
+      ? 'Link copied. Choose Install from Git, paste it, and install. NaCLip is replaced in place.'
+      : `Choose Install from Git, paste ${REPO_URL}, and install. NaCLip is replaced in place.`,
+    detail: 'Installed by copying plugin.js? Replace that file with the new plugin.js instead (Open plugin.js in NaCLip appearance).',
+    durationMs: 0,
+    placement: 'default'
+  })
+}
+
+function startUpdateChecks(ctx) {
+  if (sdk.IS_PREVIEW) return () => {}
+  const later = (fn, ms) => (typeof ctx.setTimeout === 'function' ? ctx.setTimeout(fn, ms) : (id => () => clearTimeout(id))(setTimeout(fn, ms)))
+  const every = (fn, ms) => (typeof ctx.setInterval === 'function' ? ctx.setInterval(fn, ms) : (id => () => clearInterval(id))(setInterval(fn, ms)))
+  const offs = [later(() => checkForUpdate(), UPDATE_FIRST_CHECK_MS), every(() => checkForUpdate(), UPDATE_INTERVAL_MS)]
+  return () => offs.forEach(off => off())
+}
+
+function UpdateCard() {
+  const info = useValue($update)
+  const [checks, setChecks] = useState(() => (pluginCtx ? pluginCtx.storage.get('updateChecks', true) !== false : true))
+  const [busy, setBusy] = useState(false)
+  const btn = (label, run, props = {}) => element('button', { type: 'button', className: 'skin-button', onClick: run, ...props }, label)
+  return element('section', { className: cn('skin-update', info && 'has-update'), 'aria-label': 'NaCLip updates' }, [
+    element('div', { key: 'text', className: 'skin-update-text' }, [
+      element('strong', { key: 'title' }, info ? `NaCLip ${info.version} is available` : `NaCLip ${VERSION}`),
+      info && info.notes.length
+        ? element('ul', { key: 'notes' }, info.notes.map((n, i) => element('li', { key: i }, n)))
+        : element('p', { key: 'note', className: 'skin-help' }, info ? 'A new version is ready.' : 'Updates are offered here and as a notification when a new version is published.')
+    ]),
+    element('div', { key: 'actions', className: 'skin-inline-actions' }, [
+      info ? btn('Update', () => startUpdate(info), { key: 'update', 'data-primary': true }) : null,
+      info ? btn('Open plugin.js', () => pluginCtx && pluginCtx.os.openExternal(PLUGIN_RAW_URL), { key: 'raw' }) : null,
+      info ? btn('What’s new', () => pluginCtx && pluginCtx.os.openExternal(info.url), { key: 'notes' }) : null,
+      btn(busy ? 'Checking…' : 'Check for updates', async () => { setBusy(true); try { await checkForUpdate({ manual: true }) } finally { setBusy(false) } }, { key: 'check', disabled: busy }),
+      element('label', { key: 'auto', className: 'skin-checkbox' }, [
+        element('input', { key: 'box', type: 'checkbox', checked: checks, onChange: e => { setChecks(e.target.checked); pluginCtx && pluginCtx.storage.set('updateChecks', e.target.checked) } }),
+        element('span', { key: 'label' }, 'Check automatically')
+      ])
+    ])
+  ])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // ::tandem-sent receipts
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -1236,6 +1525,7 @@ export function AppearanceSettings() {
  const palette=draft.palette[editingMode]
  return element('section',{className:'skin-appearance','aria-label':SKIN_NAME+' appearance'},[
   element('div',{className:'skin-settings-heading'},[element('h3',{},SKIN_NAME),element('p',{},'Your skin for Hermes. Make the desk yours.')]),
+  jsx(UpdateCard,{}),
   element('div',{className:'skin-palette-choices'},PALETTE_PRESETS.map(p=>btn(p.name,()=>apply({...pack,name:p.name,palette:{light:p.light,dark:p.dark}}),{key:p.id,'aria-pressed':pack.name===p.name&&JSON.stringify(pack.palette)===JSON.stringify({light:p.light,dark:p.dark}),children:undefined}))),
   field('Pack name',element('input',{value:draft.name,maxLength:48,onChange:e=>setDraft({...draft,name:e.target.value})})),
   element('div',{className:'skin-section-heading'},[element('h4',{},'Colors'),field('Editing palette',element('select',{value:editingMode,onChange:e=>setEditingMode(e.target.value),'aria-label':'Editing palette'},['light','dark'].map(m=>element('option',{key:m,value:m},m==='light'?'Light':'Dark'))))]),
@@ -1272,7 +1562,8 @@ function SettingsCard(){return jsx(AppearanceSettings,{})}
 
 const CHROME_CSS = `
 .skin-collapsed-rail,.skin-expanded-rail{display:flex;flex-direction:column;gap:8px;padding:8px;background:var(--ui-bg-sidebar);color:var(--ui-text-primary)}
-.skin-collapsed-rail{height:100%;width:64px;position:relative}.skin-expanded-rail{position:fixed;inset:auto;margin:0;width:214px;border:0;border-right:1px solid var(--ui-stroke-secondary);box-shadow:12px 0 28px #0002;overflow:hidden}
+.skin-collapsed-rail{height:100%;width:100%;position:relative}.skin-expanded-rail{position:fixed;inset:auto;margin:0;width:214px;border:0;border-right:1px solid var(--ui-stroke-secondary);box-shadow:12px 0 28px #0002;overflow:hidden}
+.skin-expanded-rail[data-side='right']{border-right:0;border-left:1px solid var(--ui-stroke-secondary);box-shadow:-12px 0 28px #0002}.skin-expanded-rail[data-side='right'] .skin-rail-expand{justify-content:flex-end}
 .skin-expanded-rail:not(:popover-open){display:none}.skin-expanded-rail::backdrop{background:transparent;pointer-events:none}
 .skin-rail-expand{display:flex;align-items:center;justify-content:center;min-height:44px;flex:none;border-radius:8px;font-size:20px;color:var(--ui-text-secondary)}.skin-expanded-rail .skin-rail-expand{justify-content:flex-start;font-size:12px;padding:0 12px}.skin-rail-expand:hover{background:var(--ui-bg-elevated)}
 .skin-widget-list{display:flex;flex-direction:column;align-items:stretch;gap:8px;overflow:auto;overflow-x:hidden;flex:1;min-height:0;padding:3px 2px;scrollbar-width:thin}.skin-widget-list>span{display:block}
@@ -1289,8 +1580,18 @@ const CHROME_CSS = `
 [data-style='outline'] .tandem-tile{background:transparent;color:var(--ui-text-secondary);border:1px solid var(--ui-stroke-secondary);box-shadow:none}[data-style='outline'] .is-active .tandem-tile{color:var(--ui-accent)}[data-style='mono'] .tandem-tile{background:var(--ui-accent);color:var(--skin-accent-ink,#fff);box-shadow:none}[data-shape='circle'] .tandem-tile{border-radius:50%}[data-shape='square'] .tandem-tile{border-radius:4px}
 .skin-appearance{font-size:12px;display:flex;flex-direction:column;gap:14px;max-width:760px}.skin-settings-heading h3{font-size:19px;margin:0}.skin-settings-heading p,.skin-help{font-size:12px;line-height:1.6;color:var(--ui-text-secondary);margin:6px 0}.skin-palette-choices,.skin-pack-choices,.skin-inline-actions,.skin-apply-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.skin-button{min-height:44px;padding:8px 14px;border:1px solid var(--ui-stroke-secondary);border-radius:8px;color:var(--ui-text-primary);background:var(--ui-bg)}.skin-button[aria-pressed='true']{border-color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}.skin-button:hover{background:var(--ui-bg-elevated)}.skin-button[data-primary]{background:var(--ui-accent);color:var(--skin-accent-ink,#fff)}.skin-button:focus-visible{outline:2px solid var(--ui-accent)}.skin-button:disabled{opacity:.45;cursor:default}
 .skin-field{display:flex;flex-direction:column;gap:7px;min-width:0;color:var(--ui-text-secondary)}.skin-field input,.skin-field select,.skin-field textarea,.skin-json{width:100%;max-width:none;min-width:0;min-height:44px;padding:9px 10px;border:1px solid var(--ui-stroke-secondary);border-radius:7px;color:var(--ui-text-primary);background:var(--ui-bg)}.skin-field textarea{min-height:85px;resize:vertical}.skin-field input[type=color]{height:44px;padding:4px;cursor:pointer}.skin-section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--ui-stroke-secondary);padding-top:16px}.skin-section-heading h4,.skin-agent-theme h4{font-size:14px;font-weight:600;margin:0}.skin-section-heading .skin-field{min-width:120px;font-size:10px}.skin-color-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.skin-widget-editor{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.skin-widget-editor .skin-inline-actions{grid-column:1/-1}.skin-checkbox{display:flex;align-items:center;gap:8px;min-height:44px}.skin-checkbox input{width:18px;height:18px;accent-color:var(--ui-accent)}.skin-details{border-top:1px solid var(--ui-stroke-secondary);padding:10px 0}.skin-details summary{min-height:44px;cursor:pointer;align-content:center;font-weight:500}.skin-details[open]{display:flex;flex-direction:column;gap:12px}.skin-json{font:11px/1.6 ui-monospace,monospace;min-height:170px;resize:vertical}.skin-apply-row{padding:12px 0;border-top:1px solid var(--ui-stroke-secondary)}.skin-apply-row>span{font-size:10px;color:var(--ui-text-tertiary)}.skin-settings-status{font-size:12px;line-height:1.6;color:var(--ui-text-secondary);min-height:20px}.skin-agent-theme{border-top:1px solid var(--ui-stroke-secondary);padding-top:20px;display:flex;flex-direction:column;gap:10px}
-@media(max-width:700px){.skin-collapsed-rail{width:58px;padding:8px 5px}.skin-expanded-rail{width:214px}.skin-color-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.skin-widget-editor{grid-template-columns:1fr}.skin-section-heading{flex-wrap:wrap}.skin-appearance{gap:12px}.skin-button{padding:8px 10px}}
+@media(max-width:700px){.skin-collapsed-rail{padding:8px 5px}.skin-expanded-rail{width:214px}.skin-color-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.skin-widget-editor{grid-template-columns:1fr}.skin-section-heading{flex-wrap:wrap}.skin-appearance{gap:12px}.skin-button{padding:8px 10px}}
 
+/* Layout guard (see startLayoutGuard): fixed NaCLip strips have no seam, and
+   other vertical seams start below the titlebar so they never cross the window
+   controls. */
+[data-naclip-sash='locked']{display:none!important}
+[data-naclip-sash='below-titlebar']{top:${TITLEBAR_BAND_PX}px!important}
+/* Hermes's sidebar glass paints from the left edge only; follow the sidebar. */
+html:root[data-hermes-glass][data-hermes-glass-scope='sidebar'][data-naclip-sidebar-side='left'] body{background:linear-gradient(to right,color-mix(in srgb,var(--ui-bg-chrome) var(--translucency-glass-keep,100%),transparent) var(--naclip-glass-edge,0px),var(--ui-bg-chrome) var(--naclip-glass-edge,0px))}
+html:root[data-hermes-glass][data-hermes-glass-scope='sidebar'][data-naclip-sidebar-side='right'] body{background:linear-gradient(to left,color-mix(in srgb,var(--ui-bg-chrome) var(--translucency-glass-keep,100%),transparent) var(--naclip-glass-edge,0px),var(--ui-bg-chrome) var(--naclip-glass-edge,0px))}
+.tandem-tile{position:relative}.skin-update-dot{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--ui-accent);box-shadow:0 0 0 2px var(--ui-bg-sidebar,var(--ui-bg))}
+.skin-update{display:flex;flex-direction:column;gap:10px;padding:12px 14px;border:1px solid var(--ui-stroke-secondary);border-radius:10px;background:var(--ui-bg-elevated)}.skin-update.has-update{border-color:var(--ui-accent);box-shadow:inset 0 0 0 1px var(--ui-accent)}.skin-update strong{font-size:13px}.skin-update ul{margin:6px 0 0;padding-left:18px;line-height:1.6;color:var(--ui-text-secondary)}
 .tandem-theme-toggle { display:grid;place-items:center;width:44px;height:44px;border-radius:10px;color:var(--ui-text-secondary); }
 .tandem-theme-toggle:hover { background:var(--ui-bg-elevated); }
 .tandem-theme-toggle:focus-visible { outline:2px solid var(--ui-accent); }
@@ -1380,7 +1681,8 @@ export default {
         id: 'rail',
         area: 'panes',
         title: 'Rail',
-        data: { placement: 'left', dock: { pane: 'sessions', pos: 'left' }, width: '60px' },
+        // Fixed strip: min = max = width, so no seam can stretch it across the window.
+        data: { placement: 'left', dock: { pane: 'sessions', pos: 'left' }, width: '64px', minWidth: '64px', maxWidth: '64px' },
         render: () => jsx(Rail, {})
       },
       {
@@ -1394,10 +1696,12 @@ export default {
         id: 'dock',
         area: 'panes',
         title: 'Dock',
-        data: { placement: 'bottom', dock: { pane: 'workspace', pos: 'bottom' }, height: '56px' },
+        // Fixed strip: a free height let the dock seam drag the chips mid-window.
+        data: { placement: 'bottom', dock: { pane: 'workspace', pos: 'bottom' }, height: '56px', minHeight: '56px', maxHeight: '56px' },
         render: () => jsx(Dock, {})
       },
       { id: 'open-computer', area: sdk.PALETTE_AREA, data: { id: 'tandem.open-computer', label: 'NaCLip: Open agent’s computer', keywords: ['screen', 'vm', 'computer'], run: openComputer } },
+      { id: 'check-update', area: sdk.PALETTE_AREA, data: { id: 'naclip.check-update', label: 'NaCLip: Check for updates', keywords: ['update', 'version', 'upgrade'], run: () => checkForUpdate({ manual: true }) } },
       { id: 'open-appearance', area: sdk.PALETTE_AREA, data: { id:'naclip.open-appearance',label:'NaCLip: Customize appearance',keywords:['settings','theme','widgets','packs'],run:openAppearance } },
       {
         id: 'use-theme',
@@ -1420,6 +1724,8 @@ export default {
 
     ctx.registerMany(contributions.filter(c => c.area))
     applyNavTidy(true)
+    const stopLayoutGuard = startLayoutGuard(ctx)
+    const stopUpdateChecks = startUpdateChecks(ctx)
 
     ctx.onDispose(() => {
       stylesheet.remove()
@@ -1431,6 +1737,9 @@ export default {
       closeComputerWorkspace?.()
       closeComputerWorkspace = null
       $computerWorkspaceOpen.set(false)
+      stopLayoutGuard()
+      stopUpdateChecks()
+      $update.set(null)
       disposeNavPrefs()
       disposeCustomTheme()
       $railExpanded.set(false)

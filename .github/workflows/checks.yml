@@ -21,6 +21,7 @@ jobs:
       - run: node tandem/scripts/check-routing.mjs
       - run: node tandem/scripts/check-appearance.mjs
       - run: node tandem/scripts/check-workspaces.mjs
+      - run: node tandem/scripts/check-layout.mjs
       - run: python3 landing/scripts/social-preview.py
       - run: python3 scripts/test-launcher.py
         env:
